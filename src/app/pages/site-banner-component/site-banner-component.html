@@ -1,0 +1,47 @@
+<section class="relative w-full py-4 md:py-8 lg:py-10 bg-cream-50">
+  <div class="max-w-screen-2xl mx-auto px-4 md:px-8 lg:px-12">
+    <!-- Loading Shimmer / Skeleton -->
+    <div
+      *ngIf="isLoading() || !imageVisible()"
+      class="w-full aspect-video md:aspect-21/9 lg:aspect-21/7 bg-slate-200 animate-pulse relative overflow-hidden rounded-2xl md:rounded-3xl lg:rounded-[3rem] shadow-xl"
+    >
+      <div
+        class="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent skeleton-shimmer"
+      ></div>
+      <div class="absolute inset-0 flex items-center justify-center">
+        <div class="flex flex-col items-center gap-4">
+          <div class="w-16 h-16 rounded-full bg-emerald-100/50 flex items-center justify-center">
+            <i class="fas fa-image text-emerald-300 text-2xl animate-bounce-slow"></i>
+          </div>
+          <span class="text-emerald-800/30 text-sm font-medium">در حال بارگذاری...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Banner Image -->
+    <div
+      class="relative w-full transition-all duration-1000 ease-out transform overflow-hidden rounded-2xl md:rounded-3xl lg:rounded-[3rem] shadow-xl"
+      [class.opacity-0]="!imageVisible()"
+      [class.scale-105]="!imageVisible()"
+      [class.opacity-100]="imageVisible()"
+      [class.scale-100]="imageVisible()"
+    >
+      <ng-container *ngIf="bannerUrl() as url">
+        <img
+          [src]="url"
+          alt="Clinic Banner"
+          class="w-full h-auto object-cover aspect-video md:aspect-21/9 lg:aspect-21/7 block"
+          (load)="onImageLoad()"
+        />
+
+        <!-- Subtle Decorative Overlays -->
+        <div
+          class="absolute inset-0 bg-linear-to-t from-emerald-950/10 to-transparent pointer-events-none"
+        ></div>
+        <div
+          class="absolute inset-0 ring-1 ring-inset ring-emerald-900/5 pointer-events-none"
+        ></div>
+      </ng-container>
+    </div>
+  </div>
+</section>

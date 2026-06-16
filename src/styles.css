@@ -1,0 +1,38 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import 'tailwindcss';
+
+@font-face {
+  font-family: 'IranSans';
+  font-weight: 400;
+  src: url('/assets/fonts/IRANSans.woff') format('woff');
+}
+
+body {
+  font-family: 'IranSans', sans-serif;
+}
+
+@theme {
+  --color-cream-50: #fdfcf8;
+  --color-cream-100: #f9f6e5;
+  --color-emerald-950: #022c22;
+  --color-emerald-900: #064e3b;
+  --color-emerald-800: #065f46;
+  --color-emerald-700: #047857;
+  --color-emerald-600: #059669;
+  --color-emerald-500: #10b981;
+
+  --animate-bounce-slow: bounce-slow 3s infinite;
+
+  @keyframes bounce-slow {
+    0%,
+    100% {
+      transform: translateY(-5%);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: translateY(0);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+  }
+}

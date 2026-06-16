@@ -1,0 +1,83 @@
+<div class="bg-cream-50/50 min-h-screen font-sans pb-24" dir="rtl">
+
+  @if (blog$ | async; as blog) {
+    <!-- Article Hero Section -->
+    <section class="relative bg-emerald-950 py-32 overflow-hidden">
+      <div class="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,var(--tw-gradient-from)_0%,transparent_70%)] from-emerald-500"></div>
+      <div class="absolute top-0 right-0 w-150 h-150 bg-emerald-500/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/4"></div>
+
+      <div class="container mx-auto px-6 relative z-10 text-center">
+        <!-- Breadcrumbs -->
+        <nav class="flex items-center justify-center gap-3 text-emerald-400/40 text-[11px] font-black uppercase tracking-widest mb-10">
+          <a routerLink="/" class="hover:text-emerald-400 transition-colors">صفحه اصلی</a>
+          <i class="fas fa-chevron-left text-[8px]"></i>
+          <span class="text-emerald-400/60">اخبار و مقالات</span>
+        </nav>
+
+        <h1 class="text-4xl md:text-6xl font-black text-white mb-10 leading-tight max-w-4xl mx-auto">
+          {{ blog.title }}
+        </h1>
+
+        <div class="flex items-center justify-center gap-8 text-emerald-100/40 text-[13px] font-bold">
+          <div class="flex items-center gap-3">
+            <i class="fas fa-calendar-alt text-emerald-500"></i>
+            <span>خرداد ۱۴۰۳</span>
+          </div>
+          <div class="w-1.5 h-1.5 rounded-full bg-emerald-800"></div>
+          <div class="flex items-center gap-3">
+            <i class="fas fa-bookmark text-emerald-500"></i>
+            <span>مجله سلامت</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Article Content -->
+    <div class="container mx-auto px-6 -mt-16 relative z-20">
+      <div class="max-w-4xl mx-auto">
+
+        <div class="bg-white rounded-[4rem] shadow-2xl shadow-emerald-950/10 border border-emerald-50 p-10 md:p-20 relative overflow-hidden">
+
+          <!-- Decorative Background Element -->
+          <div class="absolute top-0 right-0 w-80 h-80 bg-emerald-50/30 rounded-full -translate-y-1/2 translate-x-1/2 -z-10"></div>
+
+          <!-- Decorative Icon -->
+          <div class="flex justify-center -mt-28 md:-mt-36 mb-16 relative z-10">
+            <div class="w-32 h-32 rounded-[2.5rem] bg-white shadow-2xl flex items-center justify-center text-emerald-600 border border-emerald-50 ring-12 ring-white">
+              <i class="fas fa-newspaper text-4xl"></i>
+            </div>
+          </div>
+
+          <!-- Content Body -->
+          <div class="relative z-10">
+            <h2 class="text-2xl md:text-3xl text-emerald-950 font-black leading-relaxed mb-12 text-justify">
+              {{ blog.title }}
+            </h2>
+
+            <div class="w-24 h-2 bg-emerald-500 rounded-full mb-16"></div>
+
+            <p class="text-emerald-900/70 text-lg md:text-xl leading-[2.6] text-justify whitespace-pre-line font-medium">
+              {{ blog.description }}
+            </p>
+          </div>
+
+          <!-- Actions -->
+          <div class="mt-20 pt-16 border-t border-emerald-50 flex flex-col md:flex-row items-center justify-center gap-8">
+            <a routerLink="/" class="flex items-center gap-4 py-6 px-14 bg-emerald-950 text-cream-50 font-black text-sm rounded-4xl hover:bg-emerald-800 transition-all shadow-2xl shadow-emerald-900/20 group active:scale-95">
+              <i class="fas fa-arrow-right text-[10px] transform group-hover:translate-x-2 transition-transform duration-300"></i>
+              <span>بازگشت به لیست اخبار</span>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  } @else {
+    <!-- Loading State -->
+    <div class="flex flex-col items-center justify-center py-40">
+      <div class="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mb-6"></div>
+      <p class="text-slate-400 font-black tracking-widest uppercase text-xs">در حال بارگذاری مقاله...</p>
+    </div>
+  }
+
+</div>

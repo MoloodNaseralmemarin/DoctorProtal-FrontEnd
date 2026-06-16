@@ -1,0 +1,129 @@
+<div class="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 pb-12">
+  <!-- Header Section -->
+  <div class="mb-10">
+    <div class="flex items-center gap-4 mb-3">
+      <div
+        class="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center shadow-inner"
+      >
+        <i class="fas fa-user-md text-emerald-600 text-xl"></i>
+      </div>
+      <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">پروفایل پزشک</h2>
+    </div>
+    <p class="text-slate-500 font-medium italic mr-16">
+      اطلاعات عمومی و بیوگرافی پزشک را مدیریت کنید
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Form Side -->
+    <div class="lg:col-span-2">
+      <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
+        <div class="p-8 sm:p-10">
+          <form (ngSubmit)="onSubmit()" class="space-y-8">
+            <!-- Full Name -->
+            <div class="space-y-6">
+              <label class="flex items-center gap-2 text-sm font-bold text-slate-700 mr-2">
+                <i class="fas fa-id-card text-emerald-500 text-xs"></i>
+                نام و نام خانوادگی
+              </label>
+              <div class="relative">
+                <input
+                  type="text"
+                  [(ngModel)]="doctor.fullName"
+                  name="fullName"
+                  class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-700 font-bold focus:bg-white focus:border-emerald-400 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all"
+                  placeholder="مثلا: دکتر علی علوی"
+                />
+              </div>
+            </div>
+
+            <!-- Clinic Info / Bio -->
+            <div class="space-y-3">
+              <label class="flex items-center gap-2 text-sm font-bold text-slate-700 mr-2">
+                <i class="fas fa-info-circle text-emerald-500 text-xs"></i>
+                بیوگرافی و اطلاعات مطب
+              </label>
+              <div class="relative">
+                <textarea
+                  [(ngModel)]="doctor.clinicInfo"
+                  name="clinicInfo"
+                  rows="8"
+                  class="w-full bg-slate-50 border border-slate-100 rounded-4xl px-5 py-4 text-slate-700 font-medium leading-relaxed focus:bg-white focus:border-emerald-400 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all resize-none custom-scrollbar"
+                  placeholder="تخصص، سوابق و آدرس مطب را وارد کنید..."
+                ></textarea>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="pt-6 border-t border-slate-50 flex items-center justify-end gap-4">
+              <button
+                type="submit"
+                [disabled]="isSubmitting"
+                class="relative group px-12 py-4 bg-emerald-900 text-white rounded-2xl font-bold shadow-xl shadow-emerald-900/20 hover:bg-emerald-800 transition-all active:scale-95 disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none disabled:cursor-not-allowed overflow-hidden"
+              >
+                <div class="relative z-10 flex items-center gap-3">
+                  <i
+                    class="fas"
+                    [class.fa-save]="!isSubmitting"
+                    [class.fa-circle-notch]="isSubmitting"
+                    [class.animate-spin]="isSubmitting"
+                  ></i>
+                  <span>{{ isSubmitting ? 'در حال ذخیره...' : 'ذخیره تغییرات' }}</span>
+                </div>
+                <div
+                  class="absolute inset-0 bg-linear-to-r from-emerald-800 to-emerald-900 opacity-0 group-hover:opacity-100 transition-opacity"
+                ></div>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preview/Info Side -->
+    <div class="space-y-6">
+      <!-- Live Preview Card -->
+      <div
+        class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm p-8 text-center relative overflow-hidden group"
+      >
+        <div
+          class="absolute top-0 right-0 w-32 h-32 bg-emerald-50 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-emerald-100 transition-colors"
+        ></div>
+
+        <div class="relative z-10 space-y-4">
+          <div
+            class="w-24 h-24 bg-slate-100 rounded-4xl mx-auto flex items-center justify-center text-slate-300"
+          >
+            <i class="fas fa-user text-4xl"></i>
+          </div>
+          <div>
+            <h3 class="text-xl font-black text-slate-800">{{ doctor.fullName || 'نام پزشک' }}</h3>
+            <p class="text-emerald-600 text-[10px] font-bold mt-1 uppercase tracking-widest">
+              پروفایل عمومی
+            </p>
+          </div>
+          <div class="w-full h-px bg-slate-50 mx-auto"></div>
+          <p class="text-slate-400 text-xs leading-relaxed line-clamp-4 min-h-16">
+            {{ doctor.clinicInfo || 'اطلاعات مطب هنوز وارد نشده است...' }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Tips -->
+      <div
+        class="bg-linear-to-br from-slate-800 to-slate-900 rounded-[2.5rem] p-8 text-white shadow-xl"
+      >
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center">
+            <i class="fas fa-lightbulb text-amber-400"></i>
+          </div>
+          <h2 class="font-extrabold text-sm">نکته حرفه‌ای</h2>
+        </div>
+        <p class="text-slate-400 text-[10px] leading-relaxed font-medium">
+          متن بیوگرافی اولین چیزی است که مراجعین در سایت مشاهده می‌کنند. سعی کنید از جملات کوتاه و
+          تاثیرگذار برای جلب اعتماد استفاده کنید.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
