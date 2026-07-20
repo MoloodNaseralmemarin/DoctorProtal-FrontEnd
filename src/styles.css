@@ -13,14 +13,14 @@ body {
 }
 
 @theme {
-  --color-cream-50: #fdfcf8;
-  --color-cream-100: #f9f6e5;
-  --color-emerald-950: #022c22;
-  --color-emerald-900: #064e3b;
-  --color-emerald-800: #065f46;
-  --color-emerald-700: #047857;
-  --color-emerald-600: #059669;
-  --color-emerald-500: #10b981;
+  --color-cream-50: #fefefb;
+  --color-cream-100: #faf8f0;
+  --color-emerald-950: #0f1c18; /* Dark charcoal with a subtle emerald-gray tint */
+  --color-emerald-900: #142822; /* Darker slate-emerald */
+  --color-emerald-800: #163e32;
+  --color-emerald-700: #124d3e;
+  --color-emerald-600: #0e6b52; /* Primary accent green - muted down from bright green */
+  --color-emerald-500: #118164;
 
   --animate-bounce-slow: bounce-slow 3s infinite;
 
