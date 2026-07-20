@@ -1,37 +1,37 @@
-<div class="bg-amber-50/50 py-24" dir="rtl" id="articles">
+<div class="bg-slate-50/50 py-24" dir="rtl" id="articles">
   <div class="container mx-auto px-6">
 
     <div class="text-center mb-16">
-      <span class="text-amber-600 font-black text-xs uppercase tracking-[0.2em] mb-4 block">News & Articles</span>
-      <h2 class="text-3xl md:text-4xl font-black text-slate-900 mb-4">آخرین اخبار و مقالات</h2>
-      <div class="w-20 h-1.5 bg-blue-950 mx-auto rounded-full"></div>
+      <span class="text-slate-400 font-bold text-xs uppercase tracking-[0.2em] mb-4 block">News & Articles</span>
+      <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-4">آخرین اخبار و مقالات</h2>
+      <div class="w-16 h-1 bg-slate-300 mx-auto rounded-full"></div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       @for (item of blogs; track item.id) {
-        <article class="group bg-white rounded-[2.5rem] overflow-hidden shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] border border-amber-100 hover:border-amber-500/30 hover:shadow-[0_20px_50px_-20px_rgba(245,158,11,0.1)] transition-all duration-500">
-          <!-- Decorative Amber Bar -->
-          <div class="h-1.5 bg-amber-500/20 group-hover:bg-amber-500 transition-colors duration-500"></div>
+        <article class="group bg-white rounded-[2rem] overflow-hidden shadow-xs border border-slate-100 hover:border-slate-200 hover:shadow-lg hover:shadow-slate-900/5 transition-all duration-500">
+          <!-- Decorative Top Bar -->
+          <div class="h-1 bg-slate-100 group-hover:bg-slate-900 transition-colors duration-500"></div>
 
           <div class="p-8">
             <div class="flex items-center gap-3 mb-6">
-              <span class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 group-hover:bg-blue-950 group-hover:text-white transition-all duration-500">
+              <span class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-700 group-hover:bg-slate-900 group-hover:text-white transition-all duration-500">
                 <i class="fas fa-newspaper"></i>
               </span>
-              <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest group-hover:text-amber-600 transition-colors">مجله سلامت</span>
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">مجله سلامت</span>
             </div>
 
-            <h3 class="text-xl font-black text-slate-900 mb-4 group-hover:text-blue-900 transition-colors duration-300">
+            <h3 class="text-lg font-bold text-slate-900 mb-4 group-hover:text-emerald-700 transition-colors duration-300">
               {{ item.title }}
             </h3>
 
-            <p class="text-slate-500 text-sm leading-loose line-clamp-4 font-medium mb-8">
+            <p class="text-slate-500 text-xs md:text-sm leading-relaxed line-clamp-4 font-medium mb-8">
               {{ item.description }}
             </p>
 
             <button
               [routerLink]="['/blog', item.id]"
-              class="w-full py-4 bg-amber-50/50 text-blue-950 font-black text-sm rounded-2xl group-hover:bg-blue-950 group-hover:text-white transition-all duration-300 flex items-center justify-center gap-2 border border-amber-100/50 group-hover:border-transparent">
+              class="w-full py-3.5 bg-slate-50 text-slate-900 font-bold text-xs md:text-sm rounded-xl group-hover:bg-slate-900 group-hover:text-white transition-all duration-300 flex items-center justify-center gap-2 border border-slate-100 group-hover:border-transparent">
               <span>ادامه مطلب</span>
               <i class="fas fa-arrow-left text-[10px]"></i>
             </button>
@@ -42,8 +42,8 @@
 
     @if (blogs.length === 0) {
       <div class="text-center py-20 text-slate-400">
-        <i class="fas fa-inbox text-4xl mb-4 block"></i>
-        <p>هنوز مقاله‌ای منتشر نشده است</p>
+        <i class="fas fa-inbox text-4xl mb-4 block text-slate-200"></i>
+        <p class="text-sm font-semibold">هنوز مقاله‌ای منتشر نشده است</p>
       </div>
     }
   </div>
