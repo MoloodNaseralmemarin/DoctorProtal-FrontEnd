@@ -3,24 +3,24 @@
     <!-- Loading Shimmer / Skeleton -->
     <div
       *ngIf="isLoading() || !imageVisible()"
-      class="w-full aspect-video md:aspect-21/9 lg:aspect-21/7 bg-slate-200 animate-pulse relative overflow-hidden rounded-2xl md:rounded-3xl lg:rounded-[3rem] shadow-xl"
+      class="w-full aspect-video md:aspect-21/9 lg:aspect-21/7 bg-cream-100 animate-pulse relative overflow-hidden rounded-2xl md:rounded-3xl lg:rounded-[3rem] shadow-xl border border-cream-200"
     >
       <div
         class="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent skeleton-shimmer"
       ></div>
       <div class="absolute inset-0 flex items-center justify-center">
         <div class="flex flex-col items-center gap-4">
-          <div class="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center">
-            <i class="fas fa-image text-slate-300 text-2xl animate-bounce-slow"></i>
+          <div class="w-16 h-16 rounded-full bg-cream-50 border border-cream-200 flex items-center justify-center">
+            <i class="fas fa-image text-emerald-600 text-2xl animate-bounce-slow"></i>
           </div>
-          <span class="text-slate-500 text-sm font-medium">در حال بارگذاری...</span>
+          <span class="text-emerald-800 text-sm font-semibold">در حال بارگذاری...</span>
         </div>
       </div>
     </div>
 
     <!-- Banner Image -->
     <div
-      class="relative w-full transition-all duration-1000 ease-out transform overflow-hidden rounded-2xl md:rounded-3xl lg:rounded-[3rem] shadow-xl"
+      class="relative w-full transition-all duration-1000 ease-out transform overflow-hidden rounded-2xl md:rounded-3xl lg:rounded-[3rem] shadow-xl border-4 border-cream-100"
       [class.opacity-0]="!imageVisible()"
       [class.scale-105]="!imageVisible()"
       [class.opacity-100]="imageVisible()"
@@ -36,10 +36,10 @@
 
         <!-- Subtle Decorative Overlays -->
         <div
-          class="absolute inset-0 bg-linear-to-t from-slate-950/10 to-transparent pointer-events-none"
+          class="absolute inset-0 bg-linear-to-t from-emerald-950/10 to-transparent pointer-events-none"
         ></div>
         <div
-          class="absolute inset-0 ring-1 ring-inset ring-slate-900/5 pointer-events-none"
+          class="absolute inset-0 ring-1 ring-inset ring-emerald-900/5 pointer-events-none"
         ></div>
       </ng-container>
     </div>
