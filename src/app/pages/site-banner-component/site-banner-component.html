@@ -28,7 +28,7 @@
     >
       <ng-container *ngIf="bannerUrl() as url">
         <img
-          [src]="url"
+          [src]="pathImageSiteBanner + url"
           alt="Clinic Banner"
           class="w-full h-auto object-cover aspect-video md:aspect-21/9 lg:aspect-21/7 block"
           (load)="onImageLoad()"

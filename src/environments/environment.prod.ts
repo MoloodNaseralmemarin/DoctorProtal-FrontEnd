@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://www.dr-haghparast.ir/api',
+  apiUrl: 'https://www.dr-haghparast.ir/api',
+  siteBannerImagePath: '/assets/images/sitebanner/'
 };

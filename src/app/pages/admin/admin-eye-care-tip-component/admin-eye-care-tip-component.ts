@@ -2,8 +2,7 @@ import { Component, OnInit, ChangeDetectorRef, inject, signal, computed } from '
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
-
+import { DecoupledEditor } from 'ckeditor5';
 import { EyeCareTipService } from '../../../services/eye-care-tip-service';
 import { EyeCareTip } from '../../../../models/eye-care-tip.model';
 import { ToastService } from '../../../services/toast.service';

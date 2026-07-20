@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { BannerService } from '../../services/banner';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs/operators';
+import { environment } from '../../../environments/environment.prod';
 
 @Component({
   selector: 'app-site-banner-component',
@@ -14,6 +15,7 @@ import { finalize } from 'rxjs/operators';
 export class SiteBannerComponent implements OnInit {
   private readonly bannerService = inject(BannerService);
   private readonly destroyRef = inject(DestroyRef);
+  pathImageSiteBanner = environment.siteBannerImagePath;
 
   readonly bannerUrl = signal<string | null>(null);
   readonly isLoading = signal(true);
