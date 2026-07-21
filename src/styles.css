@@ -10,17 +10,23 @@
 
 body {
   font-family: 'IranSans', sans-serif;
+  background-color: #faf9f5; /* Elegant warm cream base */
+  color: #1e293b; /* Slate-800 for high-end readability */
 }
 
 @theme {
-  --color-cream-50: #fdfcf8;
-  --color-cream-100: #f9f6e5;
-  --color-emerald-950: #022c22;
-  --color-emerald-900: #064e3b;
-  --color-emerald-800: #065f46;
-  --color-emerald-700: #047857;
-  --color-emerald-600: #059669;
-  --color-emerald-500: #10b981;
+  --color-cream-50: #faf9f5;  /* Warm elegant cream */
+  --color-cream-100: #f5f2e6; /* Deeper rich cream */
+  --color-cream-200: #ebdcb9; /* Warm golden cream */
+
+  --color-emerald-50: #ecfdf5;  /* Very soft warm green tint */
+  --color-emerald-100: #d1fae5;
+  --color-emerald-500: #10b981; /* Vibrant brand green */
+  --color-emerald-600: #059669; /* Rich main emerald */
+  --color-emerald-700: #047857; /* Medium-dark elegant emerald */
+  --color-emerald-800: #065f46; /* Deep brand green */
+  --color-emerald-900: #064e3b; /* Deepest forest green */
+  --color-emerald-950: #022c22; /* Darkest emerald-black */
 
   --animate-bounce-slow: bounce-slow 3s infinite;
 

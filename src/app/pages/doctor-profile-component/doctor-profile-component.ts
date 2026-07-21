@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { DoctorProfile } from '../../../models/doctor-profile.model';
 import { DoctorProfileService } from '../../services/doctor-profile-service';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../environments/environment.prod';
 
 @Component({
   selector: 'app-doctor-profile-component',
@@ -12,18 +13,17 @@ import { CommonModule } from '@angular/common';
 })
 export class DoctorProfileComponent implements OnInit {
   doctor!: DoctorProfile;
-
-  constructor(private doctorProfileService: DoctorProfileService) {}
+  
+    private readonly doctorProfileService = inject(DoctorProfileService);
+    doctorImagePath = environment.doctorImagePath;
 
   ngOnInit(): void {
     // Initial data to prevent empty screen while loading
     this.doctor = {
-      fullName: 'دکتر نام پزشک شما',
-      clinicInfo:
-        'متخصص و جراح چشم، فلوشیپ فوق تخصصی قرنیه و خارج چشمی. ارائه دهنده کلیه خدمات تشخیصی و درمانی بیماری‌های چشم با بهره‌گیری از مدرن‌ترین تجهیزات روز دنیا.',
-      specialty: 'بورد تخصصی ناسیونال',
-      education: 'فلوشیپ فوق تخصصی قرنیه',
-      services: 'جراحی‌های نوین چشم و لیزیک',
+      fullName: 'دکتر رکسانا حق پرست',
+      clinicInfo:'متخصص و جراح چشم، فلوشیپ فوق تخصصی قرنیه و خارج چشمی. ارائه دهنده کلیه خدمات تشخیصی و درمانی بیماری‌های چشم با بهره‌گیری از مدرن‌ترین تجهیزات روز دنیا.',
+      education: 'مدرک تخصصی چشم‌پزشکی',
+      services: 'مشاوره‌های تخصصی در زمینه جراحی‌های چشم',
     };
 
     this.doctorProfileService.getDoctorProfile().subscribe({
@@ -32,9 +32,8 @@ export class DoctorProfileComponent implements OnInit {
           this.doctor = {
             ...data,
             // Provide sensible defaults for optional UI fields if missing from API
-            specialty: data.specialty || 'بورد تخصصی',
-            education: data.education || 'فلوشیپ فوق تخصصی از مراکز معتبر علمی و درمانی',
-            services: data.services || 'ارائه دهنده نوین‌ترین متدهای تشخیصی و درمانی',
+            education: data.education || 'مدرک تخصصی چشم پزشکی',
+            services: data.services || 'مشاوره های تخصصی در زمینه جراحی های چشم',
           };
         }
       },

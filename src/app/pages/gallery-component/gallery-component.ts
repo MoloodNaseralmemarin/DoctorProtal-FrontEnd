@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { GalleryImage } from '../../../models/gallery.model';
 import { CommonModule } from '@angular/common';
 import { GalleryService } from '../../services/gallery-service';
+import { environment } from '../../../environments/environment.prod';
 
 @Component({
   selector: 'app-gallery-component',
@@ -20,8 +21,8 @@ export class GalleryComponent implements OnInit {
   pageSize = 6;
 
   selectedImage: GalleryImage | null = null;
-
-  constructor(private galleryService: GalleryService) {}
+    private readonly galleryService = inject(GalleryService);
+  galleryImagePath = environment.galleryImagePath;
 
   ngOnInit() {
     this.loadImages();
