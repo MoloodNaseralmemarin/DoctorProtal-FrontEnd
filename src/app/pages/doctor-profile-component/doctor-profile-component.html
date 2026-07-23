@@ -54,6 +54,7 @@
                   >
                     Experience & Skills
                   </p>
+
                   <p class="text-slate-900 font-extrabold text-base">{{ doctor.specialty}}</p>
                 </div>
               </div>
@@ -67,19 +68,18 @@
 
           <!-- Content Section -->
           <div class="w-full lg:w-1/2 text-right lg:pe-6">
-            <h2
-              class="text-3xl md:text-4xl font-extrabold bg-linear-to-l from-slate-900 to-slate-700 bg-clip-text text-transparent mb-6 leading-tight tracking-tight"
-            >
-              {{ doctor.fullName }}
-            </h2>
+   <h2
+  class="text-2xl md:text-3xl font-bold whitespace-nowrap bg-linear-to-l from-slate-900 to-slate-700 bg-clip-text text-transparent mb-6"
+>
+  {{ doctor.fullName }}
+</h2>
 
-            <div class="relative mb-10">
-              <p
-                class="text-base md:text-[17px] text-slate-600 leading-[2] text-justify whitespace-pre-line ps-8 border-r-4 border-slate-300"
-              >
-                {{ doctor.clinicInfo }}
-              </p>
+           <div class="relative mb-10">
+            <div
+            class="text-base md:text-[17px] text-slate-600 leading-[2] text-justify ps-8 border-r-4 border-slate-300"
+            [innerHTML]="doctor.clinicInfo">
             </div>
+          </div>
 
             <!-- Features Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
