@@ -1,6 +1,7 @@
 export interface EyeCareTip {
   id: number;
   title: string;
-  description: string;
+  description:string;
+  bodyText: string;
   isActive: boolean;
 }

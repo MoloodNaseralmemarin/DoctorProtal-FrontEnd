@@ -56,6 +56,7 @@ export class AdminEyeCareTipComponent implements OnInit {
   model: Partial<EyeCareTip> = {
     title: '',
     description: '',
+    bodyText:'',
     isActive: true,
   };
 
@@ -90,7 +91,7 @@ export class AdminEyeCareTipComponent implements OnInit {
   }
 
   save(): void {
-    if (!this.model.title || !this.model.description) {
+    if (!this.model.title || !this.model.bodyText) {
       this.toastService.show('لطفا تمام فیلدها را پر کنید', 'error');
       return;
     }
@@ -137,7 +138,7 @@ export class AdminEyeCareTipComponent implements OnInit {
     this.showForm = false;
     this.model = {
       title: '',
-      description: '',
+      bodyText: '',
       isActive: true,
     };
   }
