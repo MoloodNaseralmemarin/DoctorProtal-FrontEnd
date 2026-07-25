@@ -1,56 +1,56 @@
-<section class="py-24 bg-white relative overflow-hidden" dir="rtl" id="education">
+<section class="py-24 bg-cream-50 relative overflow-hidden border-b border-cream-100" dir="rtl" id="education">
   <!-- Decorative Background -->
-  <div class="absolute top-0 right-0 w-96 h-96 bg-slate-50 rounded-full blur-3xl -mr-48 -mt-48 opacity-60"></div>
-  <div class="absolute bottom-0 left-0 w-96 h-96 bg-slate-100 rounded-full blur-3xl -ml-48 -mb-48 opacity-60"></div>
+  <div class="absolute top-0 right-0 w-96 h-96 bg-emerald-100/30 rounded-full blur-3xl -mr-48 -mt-48 opacity-60"></div>
+  <div class="absolute bottom-0 left-0 w-96 h-96 bg-amber-100/30 rounded-full blur-3xl -ml-48 -mb-48 opacity-60"></div>
 
   <div class="container mx-auto px-6 relative z-10">
 
     <!-- Header -->
-    <div class="max-w-2xl mb-16">
-      <div class="flex items-center gap-3 mb-4">
-        <span class="w-10 h-px bg-slate-400"></span>
-        <span class="text-slate-500 font-bold text-xs uppercase tracking-widest">
+    <div class="max-w-2xl mb-12">
+      <div class="flex items-center gap-3 mb-3">
+        <span class="w-10 h-px bg-amber-500"></span>
+        <span class="text-slate-700 font-semibold text-xs uppercase tracking-widest">
           آموزش و سلامت
         </span>
       </div>
 
-      <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 leading-tight mb-4">
-        نکات مراقبت از <span class="text-emerald-600">بینایی شما</span>
+      <h2 class="text-xl md:text-2xl font-bold text-slate-900 leading-tight mb-3">
+        نکات مراقبت از <span class="text-emerald-700">بینایی شما</span>
       </h2>
 
-      <p class="text-slate-550 font-medium leading-relaxed text-sm md:text-base">
+      <p class="text-slate-600 font-medium leading-relaxed text-xs md:text-sm">
         توصیه‌های کاربردی و نکات بهداشتی برای حفظ سلامت چشم‌ها در زندگی روزمره و محیط کار.
       </p>
     </div>
 
     <!-- Tips Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
       <div
         *ngFor="let tip of tips"
-        class="group bg-white border border-slate-100 p-8 rounded-[2rem] shadow-xs hover:shadow-lg hover:shadow-slate-900/5 hover:-translate-y-1 transition-all duration-500">
+        class="group bg-cream-50 border border-cream-200 p-6 rounded-2xl shadow-xs hover:shadow-md hover:shadow-emerald-900/5 hover:-translate-y-1 transition-all duration-500">
 
         <div
-          class="w-14 h-14 bg-slate-50 rounded-xl flex items-center justify-center mb-6 text-slate-700 group-hover:bg-slate-900 group-hover:text-white transition-colors duration-500">
-          <i class="fas fa-eye text-xl"></i>
+          class="w-10 h-10 bg-cream-100 border border-cream-200 rounded-lg flex items-center justify-center mb-4 text-slate-700 group-hover:bg-emerald-800 group-hover:text-white transition-colors duration-500">
+          <i class="fas fa-eye text-sm"></i>
         </div>
 
         <h3
-          class="text-lg font-bold text-slate-800 mb-3 group-hover:text-emerald-700 transition-colors">
+          class="text-sm font-semibold text-slate-800 mb-2 group-hover:text-emerald-800 transition-colors">
           {{ tip.title }}
         </h3>
 
         <p
-          class="text-slate-500 text-xs md:text-sm leading-relaxed mb-6 line-clamp-4 font-medium">
+          class="text-slate-600 text-xs leading-relaxed mb-4 line-clamp-3 font-medium">
           {{ tip.description }}
         </p>
 
         <a
           [routerLink]="['/eye-care-tip', tip.id]"
-          class="inline-flex items-center gap-1.5 text-slate-800 hover:text-emerald-700 font-bold text-xs group/link">
+          class="inline-flex items-center gap-1.5 text-emerald-850 hover:text-emerald-750 font-bold text-xs group/link">
           مطالعه کامل نکته
           <i
-            class="fas fa-arrow-left transition-transform group-hover/link:-translate-x-1 text-[10px]">
+            class="fas fa-arrow-left transition-transform group-hover/link:-translate-x-1 text-[10px] text-amber-500">
           </i>
         </a>
 
@@ -67,7 +67,7 @@
       <button
         (click)="changePage(pageNumber - 1)"
         [disabled]="pageNumber === 1"
-        class="w-10 h-10 rounded-xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+        class="w-10 h-10 rounded-xl border border-cream-200 bg-cream-50 text-emerald-800 hover:bg-cream-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
 
         <i class="fas fa-chevron-right text-xs"></i>
       </button>
@@ -77,8 +77,8 @@
         *ngFor="let page of pages"
         (click)="changePage(page)"
         [ngClass]="{
-          'bg-slate-900 text-white shadow-md': page === pageNumber,
-          'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50': page !== pageNumber
+          'bg-emerald-800 text-white shadow-md border-emerald-700': page === pageNumber,
+          'bg-cream-50 border border-cream-200 text-emerald-900 hover:bg-cream-100': page !== pageNumber
         }"
         class="w-10 h-10 rounded-xl font-bold transition-all duration-300 text-sm">
 
@@ -90,7 +90,7 @@
       <button
         (click)="changePage(pageNumber + 1)"
         [disabled]="pageNumber === totalPages"
-        class="w-10 h-10 rounded-xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+        class="w-10 h-10 rounded-xl border border-cream-200 bg-cream-50 text-emerald-800 hover:bg-cream-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
 
         <i class="fas fa-chevron-left text-xs"></i>
       </button>
@@ -101,11 +101,11 @@
     <div *ngIf="tips.length === 0" class="py-20 text-center">
 
       <div
-        class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-300">
+        class="w-16 h-16 bg-cream-100 border border-cream-200 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-600/40">
         <i class="fas fa-info-circle text-2xl"></i>
       </div>
 
-      <p class="text-slate-400 font-bold text-sm">
+      <p class="text-emerald-800 font-bold text-sm">
         در حال حاضر نکته‌ای برای نمایش وجود ندارد.
       </p>
 
