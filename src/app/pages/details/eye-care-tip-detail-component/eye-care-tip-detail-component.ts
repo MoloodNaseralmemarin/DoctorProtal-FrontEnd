@@ -9,7 +9,7 @@ import { Headercomponent } from '../../../shared/headercomponent/headercomponent
 @Component({
   selector: 'app-eye-care-tip-detail-component',
   standalone: true,
-  imports: [CommonModule, RouterModule, Headercomponent],
+  imports: [CommonModule, RouterModule],
   templateUrl: './eye-care-tip-detail-component.html',
   styleUrl: './eye-care-tip-detail-component.css',
 })

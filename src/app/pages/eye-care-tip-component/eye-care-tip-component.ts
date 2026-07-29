@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { EyeCareTip } from '../../../models/eye-care-tip.model';
 import { EyeCareTipService } from '../../services/eye-care-tip-service';
 import { RouterModule } from '@angular/router';
+import { environment } from '../../../environments/environment.prod';
 
 @Component({
   selector: 'app-eye-care-tip-component',
@@ -15,6 +16,7 @@ import { RouterModule } from '@angular/router';
 })
 export class EyeCareTipComponent implements OnInit {
 
+  eyeCareImagePath = environment.eyeCareImagePath;
   tips: EyeCareTip[] = [];
 
   pageNumber = 1;
