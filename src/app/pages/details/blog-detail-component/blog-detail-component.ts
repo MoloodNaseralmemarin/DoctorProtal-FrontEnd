@@ -9,7 +9,7 @@ import { Headercomponent } from '../../../shared/headercomponent/headercomponent
 @Component({
   selector: 'app-blog-detail-component',
   standalone:true,
-  imports: [CommonModule, RouterModule, Headercomponent],
+  imports: [CommonModule, RouterModule],
   templateUrl: './blog-detail-component.html',
   styleUrl: './blog-detail-component.css',
 })

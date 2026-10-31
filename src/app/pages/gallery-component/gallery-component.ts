@@ -21,7 +21,7 @@ export class GalleryComponent implements OnInit {
   pageSize = 6;
 
   selectedImage: GalleryImage | null = null;
-    private readonly galleryService = inject(GalleryService);
+  private readonly galleryService = inject(GalleryService);
   galleryImagePath = environment.galleryImagePath;
 
   ngOnInit() {
