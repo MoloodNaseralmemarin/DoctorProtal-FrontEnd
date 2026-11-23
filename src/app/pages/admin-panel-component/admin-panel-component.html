@@ -37,6 +37,7 @@
         </div>
         <div class="p-8 grid grid-cols-2 sm:grid-cols-3 gap-6">
           <button *ngFor="let action of quickActions"
+                  [routerLink]="action.path"
                   class="flex flex-col items-center gap-4 p-6 rounded-3xl border border-slate-50 hover:border-emerald-100 hover:bg-emerald-50 transition-all group active:scale-95">
             <div class="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-500 group-hover:bg-white group-hover:text-emerald-600 transition-all shadow-inner group-hover:shadow-sm">
               <i [class]="action.icon + ' text-xl'"></i>

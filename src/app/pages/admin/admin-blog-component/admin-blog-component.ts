@@ -61,6 +61,12 @@ export class AdminBlogComponent implements OnInit {
 
   totalCount = signal(0);
 
+  /**
+   * True when the API already returned a single page of results. In that case
+   * the list must not be sliced again in the template.
+   */
+  private serverPaginated = false;
+
 
   Math = Math;
 
@@ -86,17 +92,12 @@ export class AdminBlogComponent implements OnInit {
 
 
   onReady(editor: any): void {
+    const editable = editor?.ui?.getEditableElement();
+    const toolbar = editor?.ui?.view?.toolbar?.element;
 
-    const toolbar =
-      editor.ui.view.toolbar.element;
-
-    const editable =
-      editor.ui.getEditableElement();
-
-
-    editable.parentElement
-      ?.insertBefore(toolbar, editable);
-
+    if (editable?.parentElement && toolbar) {
+      editable.parentElement.insertBefore(toolbar, editable);
+    }
   }
 
 
@@ -104,9 +105,7 @@ export class AdminBlogComponent implements OnInit {
 
   load(): void {
 
-
     this.isLoading.set(true);
-
 
     this.service.getAll(
       this.currentPage(),
@@ -115,52 +114,31 @@ export class AdminBlogComponent implements OnInit {
     )
     .subscribe({
 
-      next: (res:any)=>{
+      next: (res: any) => {
 
-
-        if(Array.isArray(res)){
-
+        if (Array.isArray(res)) {
+          this.serverPaginated = false;
           this.blogs.set(res);
-
-          this.totalCount.set(
-            res.length
-          );
-
+          this.totalCount.set(res.length);
         }
         else {
-
-
-          this.blogs.set(
-            res.items ??
-            res.data ??
-            []
-          );
-
-
-          this.totalCount.set(
-            res.totalCount ??
-            res.totalItems ??
-            0
-          );
-
+          this.serverPaginated = true;
+          this.blogs.set(res?.items ?? res?.data ?? []);
+          this.totalCount.set(res?.totalCount ?? res?.totalItems ?? 0);
         }
 
-
         this.isLoading.set(false);
-
         this.cdr.detectChanges();
 
       },
 
 
-      error:()=>{
-
+      error: () => {
 
         this.toastService.show(
           'خطا در بارگذاری لیست بلاگ‌ها',
           'error'
         );
-
 
         this.isLoading.set(false);
 
@@ -175,24 +153,14 @@ export class AdminBlogComponent implements OnInit {
 
   filteredBlogs(): Blog[] {
 
+    const search = this.searchTerm().trim().toLowerCase();
 
-    const search =
-      this.searchTerm()
-      .trim()
-      .toLowerCase();
-
-
-    if(!search)
+    if (!search || this.serverPaginated) {
       return this.blogs();
-
-
+    }
 
     return this.blogs()
-      .filter(x =>
-        x.title
-        .toLowerCase()
-        .includes(search)
-      );
+      .filter(x => (x.title ?? '').toLowerCase().includes(search));
 
   }
 
@@ -201,18 +169,13 @@ export class AdminBlogComponent implements OnInit {
 
   paginatedBlogs(): Blog[] {
 
+    if (this.serverPaginated) {
+      return this.blogs();
+    }
 
-    const start =
-      (this.currentPage() - 1)
-      *
-      this.pageSize();
+    const start = (this.currentPage() - 1) * this.pageSize();
 
-
-    return this.filteredBlogs()
-      .slice(
-        start,
-        start + this.pageSize()
-      );
+    return this.filteredBlogs().slice(start, start + this.pageSize());
 
   }
 
@@ -221,11 +184,9 @@ export class AdminBlogComponent implements OnInit {
 
   totalPages(): number {
 
+    const total = this.totalCount() || this.filteredBlogs().length;
 
-    return Math.ceil(
-      this.filteredBlogs().length /
-      this.pageSize()
-    );
+    return Math.ceil(total / this.pageSize());
 
   }
 
@@ -246,11 +207,11 @@ export class AdminBlogComponent implements OnInit {
   save(): void {
 
 
-    if(
+    if (
       !this.model.title ||
       !this.model.description ||
       !this.model.bodyText
-    ){
+    ) {
 
       this.toastService.show(
         'لطفا تمام فیلدها را پر کنید',
@@ -293,7 +254,6 @@ export class AdminBlogComponent implements OnInit {
 
 
         this.reset();
-
         this.load();
 
 

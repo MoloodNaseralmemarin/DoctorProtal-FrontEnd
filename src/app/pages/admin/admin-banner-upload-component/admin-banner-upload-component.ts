@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ToastService } from '../../../services/toast.service';
 import { SiteBannerDto } from '../../../../models/siteBannerDto.model';
 import { BannerService } from '../../../services/banner';
+import { environment } from '../../../../environments/environment';
 
 
 @Component({
@@ -14,6 +15,7 @@ import { BannerService } from '../../../services/banner';
   styleUrl: './admin-banner-upload-component.css',
 })
 export class AdminBannerUploadComponent implements OnInit {
+  readonly bannerImagePath = environment.siteBannerImagePath;
   currentBanner: SiteBannerDto | null = null;
   selectedFile: File | null = null;
   photoPreview: string | null = null;

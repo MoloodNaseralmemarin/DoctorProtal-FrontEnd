@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SiteBannerComponent } from './site-banner-component';
+import { testProviders } from '../../../testing/test-providers';
 
 describe('SiteBannerComponent', () => {
   let component: SiteBannerComponent;
@@ -8,7 +9,8 @@ describe('SiteBannerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SiteBannerComponent]
+      imports: [SiteBannerComponent],
+      providers: testProviders,
     })
     .compileComponents();
 

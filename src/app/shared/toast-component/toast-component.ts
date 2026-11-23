@@ -48,6 +48,7 @@ import { Subscription } from 'rxjs';
 export class ToastComponent implements OnInit, OnDestroy {
   toasts: ToastMessage[] = [];
   private sub?: Subscription;
+  private readonly timers = new Set<ReturnType<typeof setTimeout>>();
 
   constructor(
     private toastService: ToastService,
@@ -60,12 +61,18 @@ export class ToastComponent implements OnInit, OnDestroy {
       this.cdr.detectChanges();
 
       // Auto remove after 5 seconds
-      setTimeout(() => this.remove(toast.id), 5000);
+      const timer = setTimeout(() => {
+        this.timers.delete(timer);
+        this.remove(toast.id);
+      }, 5000);
+      this.timers.add(timer);
     });
   }
 
   ngOnDestroy(): void {
     this.sub?.unsubscribe();
+    this.timers.forEach(timer => clearTimeout(timer));
+    this.timers.clear();
   }
 
   remove(id: number): void {

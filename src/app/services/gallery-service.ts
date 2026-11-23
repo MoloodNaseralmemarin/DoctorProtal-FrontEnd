@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GalleryImage } from '../../models/gallery.model';
 import { PagedResult } from '../../models/paged-result.model';
-import { environment } from '../../environments/environment.prod';
+import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 
 @Injectable({

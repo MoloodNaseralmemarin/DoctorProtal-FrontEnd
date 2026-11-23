@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { EyeCareTip } from '../../../models/eye-care-tip.model';
 import { EyeCareTipService } from '../../services/eye-care-tip-service';
 import { RouterModule } from '@angular/router';
-import { environment } from '../../../environments/environment.prod';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-eye-care-tip-component',

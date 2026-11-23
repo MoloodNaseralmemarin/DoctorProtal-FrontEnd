@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { DoctorProfile } from '../../../models/doctor-profile.model';
 import { DoctorProfileService } from '../../services/doctor-profile-service';
 import { CommonModule } from '@angular/common';
-import { environment } from '../../../environments/environment.prod';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-doctor-profile-component',
