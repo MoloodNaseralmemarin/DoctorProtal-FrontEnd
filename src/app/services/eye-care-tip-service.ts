@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { EyeCareTip } from '../../models/eye-care-tip.model';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment.prod';
+import { environment } from '../../environments/environment';
 import { PagedResult } from '../../models/paged-result.model';
 
 @Injectable({
@@ -16,13 +16,13 @@ private apiUrl = `${environment.apiUrl}/EyeCareTips`;
 
   constructor(private http: HttpClient) {}
 
-getAll(pageNumber: number = 1, pageSize: number = 3) {
-  return this.http.get<any>(
+getAll(pageNumber: number = 1, pageSize: number = 3): Observable<PagedResult<EyeCareTip>> {
+  return this.http.get<PagedResult<EyeCareTip>>(
     `${this.apiUrl}?pageNumber=${pageNumber}&pageSize=${pageSize}`
   );
 }
 
-  
+
   getById(id: number): Observable<EyeCareTip> {
     return this.http.get<EyeCareTip>(`${this.apiUrl}/${id}`);
   }

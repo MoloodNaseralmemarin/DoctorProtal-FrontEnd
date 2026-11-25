@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
-import { Headercomponent } from '../../shared/headercomponent/headercomponent';
 import { SiteBannerComponent } from '../site-banner-component/site-banner-component';
 import { ServiceListComponent } from '../service-list-component/service-list-component';
 import { DoctorProfileComponent } from '../doctor-profile-component/doctor-profile-component';
 import { EyeCareTipComponent } from '../eye-care-tip-component/eye-care-tip-component';
 import { BlogComponent } from '../blog-component/blog-component';
-import { FooterComponent } from '../../shared/footer-component/footer-component';
 import { GalleryComponent } from "../gallery-component/gallery-component";
 
 @Component({

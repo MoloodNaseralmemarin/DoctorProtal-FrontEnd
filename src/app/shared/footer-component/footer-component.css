@@ -1,0 +1,11 @@
+:host {
+  display: block;
+}
+
+/* Keep social icons still for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .footer-social,
+  .footer-social i {
+    transition: none !important;
+  }
+}

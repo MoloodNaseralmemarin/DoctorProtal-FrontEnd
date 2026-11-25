@@ -4,7 +4,6 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { EyeCareTipService } from '../../../services/eye-care-tip-service';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { Headercomponent } from '../../../shared/headercomponent/headercomponent';
 
 @Component({
   selector: 'app-eye-care-tip-detail-component',

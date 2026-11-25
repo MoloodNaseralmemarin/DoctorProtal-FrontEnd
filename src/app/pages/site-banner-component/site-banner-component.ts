@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { BannerService } from '../../services/banner';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs/operators';
-import { environment } from '../../../environments/environment.prod';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-site-banner-component',

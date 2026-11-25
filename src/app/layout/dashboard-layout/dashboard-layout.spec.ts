@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DashboardLayout } from './dashboard-layout';
+import { testProviders } from '../../../testing/test-providers';
 
 
 describe('Dashboard', () => {
@@ -9,6 +10,7 @@ describe('Dashboard', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [DashboardLayout],
+      providers: testProviders,
     }).compileComponents();
 
     fixture = TestBed.createComponent(DashboardLayout);

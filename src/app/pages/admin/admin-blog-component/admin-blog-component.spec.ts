@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AdminBlogComponent } from './admin-blog-component';
+import { testProviders } from '../../../../testing/test-providers';
 
 describe('AdminBlogComponent', () => {
   let component: AdminBlogComponent;
@@ -8,7 +9,8 @@ describe('AdminBlogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AdminBlogComponent]
+      imports: [AdminBlogComponent],
+      providers: testProviders,
     })
     .compileComponents();
 

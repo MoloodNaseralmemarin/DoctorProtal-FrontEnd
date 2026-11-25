@@ -112,7 +112,7 @@
         <input
           type="text"
           [ngModel]="searchTerm()"
-          (ngModelChange)="searchTerm.set($event); currentPage.set(1)"
+          (ngModelChange)="searchTerm.set($event); search()"
           placeholder="جستجو در بین عناوین مقالات..."
           class="w-full bg-slate-50 border-none rounded-2xl pr-12 py-3.5 text-sm font-medium focus:ring-2 focus:ring-emerald-500/10 transition-all outline-none"
         />
@@ -121,7 +121,7 @@
         <span class="text-[10px] font-bold uppercase tracking-widest">نمایش:</span>
         <select
           [ngModel]="pageSize()"
-          (ngModelChange)="pageSize.set($event); currentPage.set(1)"
+          (ngModelChange)="pageSize.set(+$event); search()"
           class="bg-transparent border-none text-xs font-bold text-slate-700 focus:ring-0 outline-none cursor-pointer">
           <option [value]="5">۵ مورد</option>
           <option [value]="10">۱۰ مورد</option>
@@ -180,7 +180,7 @@
       <!-- Pagination -->
       <div *ngIf="totalPages() > 1" class="p-6 bg-slate-50/30 border-t border-slate-50 flex items-center justify-between">
         <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-          نمایش {{ (currentPage() - 1) * pageSize() + 1 }} تا {{ Math.min(currentPage() * pageSize(), filteredBlogs().length) }} از {{ filteredBlogs().length }} مقاله
+          نمایش {{ (currentPage() - 1) * pageSize() + 1 }} تا {{ Math.min(currentPage() * pageSize(), totalCount()) }} از {{ totalCount() }} مقاله
         </span>
 
         <div class="flex items-center gap-2">

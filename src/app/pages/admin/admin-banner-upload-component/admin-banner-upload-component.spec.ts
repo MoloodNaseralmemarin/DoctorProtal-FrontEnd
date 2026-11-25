@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AdminBannerUploadComponent } from './admin-banner-upload-component';
+import { testProviders } from '../../../../testing/test-providers';
 
 describe('AdminBannerUploadComponent', () => {
   let component: AdminBannerUploadComponent;
@@ -8,7 +9,8 @@ describe('AdminBannerUploadComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AdminBannerUploadComponent]
+      imports: [AdminBannerUploadComponent],
+      providers: testProviders,
     })
     .compileComponents();
 

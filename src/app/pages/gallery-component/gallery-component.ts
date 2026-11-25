@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { GalleryImage } from '../../../models/gallery.model';
 import { CommonModule } from '@angular/common';
 import { GalleryService } from '../../services/gallery-service';
-import { environment } from '../../../environments/environment.prod';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-gallery-component',
@@ -20,6 +20,8 @@ export class GalleryComponent implements OnInit {
   currentPage = 1;
   pageSize = 6;
 
+  isLoading = true;
+
   selectedImage: GalleryImage | null = null;
   private readonly galleryService = inject(GalleryService);
   galleryImagePath = environment.galleryImagePath;
@@ -29,12 +31,21 @@ export class GalleryComponent implements OnInit {
   }
 
   loadImages() {
+    this.isLoading = true;
+
     this.galleryService
       .getGallery(this.currentPage, this.pageSize)
-      .subscribe(res => {
-        this.images = res.items;
-        this.totalCount = res.totalCount;
-
+      .subscribe({
+        next: (res) => {
+          this.images = res?.items ?? [];
+          this.totalCount = res?.totalCount ?? 0;
+          this.isLoading = false;
+        },
+        error: () => {
+          this.images = [];
+          this.totalCount = 0;
+          this.isLoading = false;
+        },
       });
   }
 
@@ -49,12 +60,16 @@ export class GalleryComponent implements OnInit {
 
   openModal(image: GalleryImage) {
     this.selectedImage = image;
-    document.body.style.overflow = 'hidden';
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = 'hidden';
+    }
   }
 
   closeModal() {
     this.selectedImage = null;
-    document.body.style.overflow = 'auto';
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = 'auto';
+    }
   }
 
   nextImage() {

@@ -68,18 +68,20 @@ export class AdminEyeCareTipComponent implements OnInit {
   }
 
   public onReady(editor: any): void {
-    editor.ui.getEditableElement().parentElement.insertBefore(
-      editor.ui.view.toolbar.element,
-      editor.ui.getEditableElement()
-    );
+    const editable = editor?.ui?.getEditableElement();
+    const toolbar = editor?.ui?.view?.toolbar?.element;
+
+    if (editable?.parentElement && toolbar) {
+      editable.parentElement.insertBefore(toolbar, editable);
+    }
   }
 
   load(): void {
     this.isLoading.set(true);
-    this.service.getAll().subscribe({
-      next: (res: any) => {
-        const data = Array.isArray(res) ? res.filter(x => x !== null) : [];
-        this.tips.set(data);
+    // The admin screen paginates locally, so fetch a large enough page.
+    this.service.getAll(1, 100).subscribe({
+      next: (res) => {
+        this.tips.set(res?.items ?? []);
         this.isLoading.set(false);
         this.cdr.detectChanges();
       },
@@ -94,6 +96,12 @@ export class AdminEyeCareTipComponent implements OnInit {
     if (!this.model.title || !this.model.bodyText) {
       this.toastService.show('لطفا تمام فیلدها را پر کنید', 'error');
       return;
+    }
+
+    // The list cards use `description`; derive it from the body when the
+    // administrator did not provide a separate summary.
+    if (!this.model.description?.trim()) {
+      this.model.description = this.toPlainText(this.model.bodyText);
     }
 
     this.isSubmitting.set(true);
@@ -138,6 +146,7 @@ export class AdminEyeCareTipComponent implements OnInit {
     this.showForm = false;
     this.model = {
       title: '',
+      description: '',
       bodyText: '',
       isActive: true,
     };
@@ -149,5 +158,9 @@ export class AdminEyeCareTipComponent implements OnInit {
 
   nextPage() {
     if (this.currentPage() < this.totalPages()) this.currentPage.update(p => p + 1);
+  }
+
+  private toPlainText(html: string): string {
+    return html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 300);
   }
 }

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EyeCareTipDetailComponent } from './eye-care-tip-detail-component';
+import { testProviders } from '../../../../testing/test-providers';
 
 describe('EyeCareTipDetailComponent', () => {
   let component: EyeCareTipDetailComponent;
@@ -8,7 +9,8 @@ describe('EyeCareTipDetailComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EyeCareTipDetailComponent]
+      imports: [EyeCareTipDetailComponent],
+      providers: testProviders,
     })
     .compileComponents();
 

@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { BlogService } from '../../../services/blog-service';
 import { CommonModule } from '@angular/common';
-import { Headercomponent } from '../../../shared/headercomponent/headercomponent';
 
 @Component({
   selector: 'app-blog-detail-component',

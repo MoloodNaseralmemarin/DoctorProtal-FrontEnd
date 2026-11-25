@@ -9,7 +9,7 @@ import {
   catchError,
 } from 'rxjs';
 
-import { environment } from '../../environments/environment.prod';
+import { environment } from '../../environments/environment';
 import { SiteBannerDto } from '../../models/siteBannerDto.model';
 
 
