@@ -11,7 +11,11 @@ import { CommonModule } from '@angular/common';
 })
 export class FooterComponent implements OnInit {
 
-  footer!: FooterDto;
+  /**
+   * Undefined until the API answers. The template renders a data-free shell in
+   * that case, so a failed request can never remove the footer from the page.
+   */
+  footer?: FooterDto;
 
   constructor(
     private footerService: FooterService,

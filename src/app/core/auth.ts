@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -14,9 +14,28 @@ export class AuthService {
 
   login(userName: string, password: string): Observable<string> {
     // PascalCase is required by the ASP.NET Core DTO.
-    return this.http.post(`${this.apiUrl}`, { UserName: userName, Password: password }, {
-      responseType: 'text',
-    });
+    return this.http
+      .post(`${this.apiUrl}`, { UserName: userName, Password: password }, { responseType: 'text' })
+      .pipe(map((response) => this.normalizeToken(response)));
+  }
+
+  /**
+   * ASP.NET Core serialises a plain string result as a JSON string
+   * (`"eyJ..."`), so the surrounding quotes must be removed before the value
+   * can be sent as a bearer token. Raw text tokens are returned unchanged.
+   */
+  private normalizeToken(response: string): string {
+    const value = (response ?? '').trim();
+
+    if (value.startsWith('"') && value.endsWith('"')) {
+      try {
+        return (JSON.parse(value) as string).trim();
+      } catch {
+        return value.replace(/^"|"$/g, '').trim();
+      }
+    }
+
+    return value;
   }
 
   getToken(): string | null {

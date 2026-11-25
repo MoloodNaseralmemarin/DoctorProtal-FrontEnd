@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { DoctorProfile } from '../../../models/doctor-profile.model';
 import { DoctorProfileService } from '../../services/doctor-profile-service';
 import { CommonModule } from '@angular/common';
@@ -15,6 +15,7 @@ export class DoctorProfileComponent implements OnInit {
   doctor!: DoctorProfile;
   
     private readonly doctorProfileService = inject(DoctorProfileService);
+    private readonly cdr = inject(ChangeDetectorRef);
     doctorImagePath = environment.doctorImagePath;
 
   ngOnInit(): void {
@@ -35,6 +36,8 @@ export class DoctorProfileComponent implements OnInit {
             education: data.education || 'مدرک تخصصی چشم پزشکی',
             services: data.services || 'مشاوره های تخصصی در زمینه جراحی های چشم',
           };
+          // The app runs zoneless, so refresh the view once the data arrives.
+          this.cdr.detectChanges();
         }
       },
       error: () => {

@@ -76,26 +76,10 @@
 </h2>
 
            <div class="relative mb-10">
-            <div
-            class="text-base md:text-[17px] text-slate-600 leading-[2] text-justify ps-8 border-r-4 border-slate-300"
-            [innerHTML]="doctor.clinicInfo">
-
-            <h2
-              class="text-xl md:text-2xl font-bold text-slate-900 mb-6 leading-tight tracking-tight flex items-center gap-2.5"
-            >
-              <i class="fas fa-user-doctor text-amber-500 text-xl md:text-2xl"></i>
-              {{ doctor.fullName }}
-            </h2>
-
-            <div class="relative mb-8">
-              <p
-                class="text-sm md:text-base text-slate-700 leading-relaxed text-justify whitespace-pre-line ps-6 border-r-4 border-amber-500"
-              >
-                {{ doctor.clinicInfo }}
-              </p>
-
-            </div>
-          </div>
+             <div
+               class="text-base md:text-[17px] text-slate-600 leading-[2] text-justify whitespace-pre-line ps-8 border-r-4 border-amber-500"
+               [innerHTML]="doctor.clinicInfo"
+             ></div>
 
             <!-- Features Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">

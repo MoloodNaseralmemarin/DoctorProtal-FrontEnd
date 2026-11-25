@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { GalleryImage } from '../../../models/gallery.model';
 import { CommonModule } from '@angular/common';
 import { GalleryService } from '../../services/gallery-service';
@@ -24,6 +24,7 @@ export class GalleryComponent implements OnInit {
 
   selectedImage: GalleryImage | null = null;
   private readonly galleryService = inject(GalleryService);
+  private readonly cdr = inject(ChangeDetectorRef);
   galleryImagePath = environment.galleryImagePath;
 
   ngOnInit() {
@@ -40,11 +41,14 @@ export class GalleryComponent implements OnInit {
           this.images = res?.items ?? [];
           this.totalCount = res?.totalCount ?? 0;
           this.isLoading = false;
+          // The app runs zoneless, so refresh the view once the data arrives.
+          this.cdr.detectChanges();
         },
         error: () => {
           this.images = [];
           this.totalCount = 0;
           this.isLoading = false;
+          this.cdr.detectChanges();
         },
       });
   }
@@ -56,6 +60,10 @@ export class GalleryComponent implements OnInit {
 
   get totalPages(): number {
     return Math.ceil(this.totalCount / this.pageSize);
+  }
+
+  get pages(): number[] {
+    return Array.from({ length: this.totalPages }, (_, index) => index + 1);
   }
 
   openModal(image: GalleryImage) {

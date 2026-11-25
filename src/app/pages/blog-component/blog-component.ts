@@ -33,8 +33,10 @@ export class BlogComponent implements OnInit {
   load(): void {
     this.service.getAll().subscribe({
       next: (res) => {
-        this.blogs = [...res];        // reference جدید
-        this.cdr.detectChanges();    // 🔥 حل قطعی مشکل رندر
+        // The API may answer with a plain array or with a paged payload.
+        const items: Blog[] = Array.isArray(res) ? res : (res?.items ?? res?.data ?? []);
+        this.blogs = [...items];
+        this.cdr.detectChanges();
       },
       error: (err) => console.error('Load error:', err),
     });

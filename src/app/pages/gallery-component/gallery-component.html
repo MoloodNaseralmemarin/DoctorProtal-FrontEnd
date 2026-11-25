@@ -46,17 +46,17 @@
 
     <!-- Pagination -->
     <div *ngIf="totalPages > 1" class="flex justify-center items-center mt-12 gap-2">
-      <button *ngFor="let page of [].constructor(totalPages); let i = index"
-              (click)="changePage(i+1)"
+      <button *ngFor="let page of pages"
+              (click)="changePage(page)"
               class="w-10 h-10 flex items-center justify-center rounded-xl font-bold transition-all duration-300 border"
-              [class.bg-emerald-800]="currentPage === i+1"
-              [class.border-emerald-700]="currentPage === i+1"
-              [class.text-white]="currentPage === i+1"
-              [class.border-cream-200]="currentPage !== i+1"
-              [class.text-emerald-900]="currentPage !== i+1"
-              [class.bg-cream-50]="currentPage !== i+1"
-              [class.hover:bg-cream-100]="currentPage !== i+1">
-        {{ i+1 }}
+              [class.bg-emerald-800]="currentPage === page"
+              [class.border-emerald-700]="currentPage === page"
+              [class.text-white]="currentPage === page"
+              [class.border-cream-200]="currentPage !== page"
+              [class.text-emerald-900]="currentPage !== page"
+              [class.bg-cream-50]="currentPage !== page"
+              [class.hover:bg-cream-100]="currentPage !== page">
+        {{ page }}
       </button>
     </div>
   </div>

@@ -1,7 +1,6 @@
 <footer
   id="footer"
   class="relative overflow-hidden bg-emerald-950 text-cream-50 border-t border-cream-200/20 pt-14 pb-8 sm:pt-16 md:pt-20 md:pb-10"
-  *ngIf="footer"
   dir="rtl"
 >
   <!-- Decorative accents -->
@@ -47,12 +46,12 @@
         </p>
 
         <nav
-          *ngIf="footer.social.length"
+          *ngIf="footer?.social?.length"
           class="flex items-center gap-3 mt-6"
           aria-label="شبکه‌های اجتماعی"
         >
           <a
-            *ngFor="let item of footer.social"
+            *ngFor="let item of footer?.social"
             [href]="item.link"
             [attr.aria-label]="'صفحه ' + item.icon"
             target="_blank"
@@ -67,32 +66,9 @@
         </nav>
       </div>
 
-<<<<<<< HEAD
-      <!-- Services Section -->
-      <div class="space-y-6">
-        <div class="flex items-center gap-3">
-          <div class="w-1 h-5 bg-amber-500 rounded-full"></div>
-          <h4 class="text-base md:text-lg font-bold text-white">خدمات تخصصی</h4>
-        </div>
-        <div class="grid gap-3">
-          <a
-            *ngFor="let service of footer.services"
-            href="#services"
-            class="text-emerald-100/70 hover:text-amber-300 transition-colors text-[14px] font-medium flex items-center gap-2 group"
-          >
-            <i
-              class="fas fa-chevron-left text-[8px] text-amber-500 opacity-0 group-hover:opacity-100 transition-all"
-            ></i>
-            {{ service }}
-          </a>
-        </div>
-      </div>
-
-      <!-- Address Section -->
-      <div class="lg:col-span-2 space-y-6">
-=======
       <!-- Services -->
       <nav
+        *ngIf="footer?.services?.length"
         class="sm:col-span-2 lg:col-span-3 min-w-0"
         aria-labelledby="footer-services-title"
       >
@@ -102,10 +78,9 @@
             خدمات تخصصی
           </h2>
         </div>
->>>>>>> c0ad3c0773675666a179da38a86cd2011e5529c2
 
         <ul class="grid gap-x-6 gap-y-3 sm:grid-cols-2 lg:grid-cols-1">
-          <li *ngFor="let service of footer.services">
+          <li *ngFor="let service of footer?.services">
             <a
               href="#services"
               class="group flex items-center gap-2 py-1 text-[13px] sm:text-sm font-medium leading-6 text-emerald-100/80 hover:text-amber-300 transition-colors rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-emerald-950"
@@ -122,6 +97,7 @@
 
       <!-- Address & Contact Card -->
       <section
+        *ngIf="footer?.address as address"
         class="sm:col-span-2 lg:col-span-5 min-w-0"
         aria-labelledby="footer-address-title"
       >
@@ -143,13 +119,13 @@
               id="footer-address-title"
               class="text-base md:text-lg font-bold text-white leading-tight"
             >
-              {{ footer.address.title }}
+              {{ address.title }}
             </h2>
           </div>
 
           <div class="relative mb-6">
             <p
-              *ngFor="let line of footer.address.lines"
+              *ngFor="let line of address.lines"
               class="text-[13px] sm:text-sm leading-7 text-emerald-100/85 font-medium break-words"
             >
               {{ line }}
@@ -166,7 +142,7 @@
 
             <div class="grid grid-cols-1 gap-2.5">
               <a
-                [href]="'tel:' + footer.address.phone.landline"
+                [href]="'tel:' + address.phone.landline"
                 class="group flex items-center gap-3 rounded-xl bg-emerald-950/60 border border-emerald-800/70 px-3.5 py-3 hover:bg-emerald-950 hover:border-amber-400/40 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-emerald-950"
               >
                 <span
@@ -180,13 +156,13 @@
                     dir="ltr"
                     class="text-sm sm:text-base font-bold text-cream-50 tabular-nums tracking-wide group-hover:text-amber-300 transition-colors"
                   >
-                    {{ footer.address.phone.landline }}
+                    {{ address.phone.landline }}
                   </span>
                 </span>
               </a>
 
               <a
-                [href]="'tel:' + footer.address.phone.mobile"
+                [href]="'tel:' + address.phone.mobile"
                 class="group flex items-center gap-3 rounded-xl bg-emerald-950/60 border border-emerald-800/70 px-3.5 py-3 hover:bg-emerald-950 hover:border-amber-400/40 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-emerald-950"
               >
                 <span
@@ -200,7 +176,7 @@
                     dir="ltr"
                     class="text-sm sm:text-base font-bold text-cream-50 tabular-nums tracking-wide group-hover:text-amber-300 transition-colors"
                   >
-                    {{ footer.address.phone.mobile }}
+                    {{ address.phone.mobile }}
                   </span>
                 </span>
               </a>
@@ -215,7 +191,7 @@
       class="pt-7 border-t border-emerald-900/90 flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-6 text-center sm:text-start"
     >
       <p class="text-emerald-100/60 text-[12px] sm:text-xs font-medium leading-6">
-        {{ footer.copyright }}
+        {{ footer?.copyright || 'کلیه حقوق این وب‌سایت محفوظ است.' }}
       </p>
 
       <p class="text-[11px] sm:text-xs font-semibold text-emerald-100/60 flex items-center gap-2">
@@ -230,6 +206,5 @@
         </a>
       </p>
     </div>
-  </div>
   </div>
 </footer>
