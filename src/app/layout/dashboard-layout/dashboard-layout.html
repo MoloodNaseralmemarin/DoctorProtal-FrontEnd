@@ -3,7 +3,7 @@
   <app-toast></app-toast>
 
   <!-- Sidebar -->
-  <app-sidebar></app-sidebar>
+  <app-sidebar [open]="isSidebarOpen()" (closed)="closeSidebar()"></app-sidebar>
 
   <!-- Main Content Wrapper -->
   <div class="flex flex-col flex-1 min-w-0 h-screen overflow-hidden">
@@ -12,13 +12,32 @@
     <header class="h-20 bg-white/80 backdrop-blur-md border-b border-slate-100 px-8 flex items-center justify-between sticky top-0 z-40 shrink-0">
       <div class="flex items-center gap-4">
         <!-- Mobile Menu Toggle -->
-        <button class="lg:hidden p-2 text-slate-500 hover:bg-slate-50 rounded-xl">
-          <i class="fas fa-bars"></i>
+        <button
+          #menuButton
+          type="button"
+          (click)="openSidebar()"
+          [attr.aria-expanded]="isSidebarOpen()"
+          aria-controls="admin-sidebar"
+          aria-label="باز کردن منوی مدیریت"
+          class="lg:hidden p-2 text-slate-500 hover:bg-slate-50 rounded-xl active:scale-95 transition-transform"
+        >
+          <i class="fas fa-bars" aria-hidden="true"></i>
         </button>
         <h2 class="text-xl font-extrabold text-slate-800 hidden sm:block">پیشخوان مدیریت</h2>
       </div>
 
       <div class="flex items-center gap-4">
+        <!-- Logout -->
+        <button
+          type="button"
+          (click)="onLogout()"
+          aria-label="خروج از حساب کاربری"
+          class="flex items-center gap-2 px-3 py-2.5 rounded-xl text-slate-500 hover:bg-red-50 hover:text-red-600 transition-all active:scale-95"
+        >
+          <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+          <span class="text-xs font-bold hidden sm:inline">خروج</span>
+        </button>
+
         <!-- Divider -->
         <div class="w-px h-6 bg-slate-100 mx-2"></div>
 

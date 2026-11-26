@@ -13,6 +13,7 @@ export class BlogService {
 
   constructor(private http: HttpClient) {}
 
+  
   // لیست + سرچ + صفحه بندی
   getAll(
     pageNumber: number = 1,

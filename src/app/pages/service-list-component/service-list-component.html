@@ -5,7 +5,7 @@
       <div
         class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cream-50 border border-cream-200 text-slate-700 text-xs font-semibold mb-4"
       >
-        <i class="fas fa-sparkles text-amber-500"></i>
+        <i class="fas fa-sparkles text-amber-500" aria-hidden="true"></i>
         <span>خدمات تخصصی چشم پزشکی</span>
       </div>
       <h2 class="text-xl md:text-2xl font-bold text-slate-900 mb-4 leading-tight">
@@ -16,49 +16,76 @@
       </p>
     </div>
 
-    <!-- Services Grid -->
-    @if (services$ | async; as services) {
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-        @for (service of services; track service.id) {
-          <div
-            (click)="openModal(service)"
-            class="group relative bg-cream-50 p-6 rounded-2xl shadow-xs hover:shadow-md hover:shadow-emerald-900/5 transition-all duration-500 cursor-pointer border border-cream-200 hover:border-emerald-600 active:scale-95 overflow-hidden"
+    @switch (status()) {
+      @case ('error') {
+        <div
+          class="max-w-xl mx-auto text-center py-16 px-6 bg-cream-50 rounded-2xl border border-cream-200"
+          role="alert"
+        >
+          <i class="fas fa-exclamation-circle text-amber-500 text-3xl block mb-4" aria-hidden="true"></i>
+          <p class="text-emerald-900 text-sm font-bold mb-5">دریافت فهرست خدمات با خطا مواجه شد.</p>
+          <button
+            type="button"
+            (click)="load()"
+            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-800 text-cream-50 text-xs font-bold hover:bg-emerald-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2"
           >
-            <!-- Decorative Background Element -->
+            <i class="fas fa-redo" aria-hidden="true"></i>
+            تلاش دوباره
+          </button>
+        </div>
+      }
+      @case ('empty') {
+        <div class="text-center py-16">
+          <div class="w-16 h-16 rounded-full bg-cream-50 border border-cream-200 flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-info-circle text-2xl text-emerald-600/60" aria-hidden="true"></i>
+          </div>
+          <p class="text-emerald-900 font-bold text-sm">در حال حاضر خدمتی برای نمایش ثبت نشده است.</p>
+        </div>
+      }
+      @case ('ready') {
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          @for (service of services(); track service.id) {
             <div
-              class="absolute -top-10 -right-10 w-32 h-32 bg-amber-100/40 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-700 blur-2xl"
-            ></div>
+              (click)="openModal(service)"
+              class="group relative bg-cream-50 p-6 rounded-2xl shadow-xs hover:shadow-md hover:shadow-emerald-900/5 transition-all duration-500 cursor-pointer border border-cream-200 hover:border-emerald-600 active:scale-95 overflow-hidden"
+            >
+              <!-- Decorative Background Element -->
+              <div
+                class="absolute -top-10 -right-10 w-32 h-32 bg-amber-100/40 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-700 blur-2xl"
+              ></div>
 
-            <div class="relative z-10">
-              <!-- Icon & Title Row -->
-              <div class="flex items-center gap-3">
-                <div
-                  class="w-10 h-10 shrink-0 rounded-lg bg-cream-100 border border-cream-200 flex items-center justify-center text-sm text-slate-700 group-hover:bg-emerald-800 group-hover:text-white transition-all duration-500 shadow-inner"
-                >
-                  <i [ngClass]="['fas', 'fa-fw', 'fa-eye', 'text-slate-700', 'group-hover:text-amber-300']"></i>
+              <div class="relative z-10">
+                <!-- Icon & Title Row -->
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-10 h-10 shrink-0 rounded-lg bg-cream-100 border border-cream-200 flex items-center justify-center text-sm text-slate-700 group-hover:bg-emerald-800 group-hover:text-white transition-all duration-500 shadow-inner"
+                  >
+                    <i [ngClass]="['fas', 'fa-fw', 'fa-eye', 'text-slate-700', 'group-hover:text-amber-300']" aria-hidden="true"></i>
+                  </div>
+                  <h3
+                    class="text-sm font-semibold text-slate-800 group-hover:text-emerald-800 transition-colors duration-300 leading-tight"
+                  >
+                    {{ service.title }}
+                  </h3>
                 </div>
-                <h3
-                  class="text-sm font-semibold text-slate-800 group-hover:text-emerald-800 transition-colors duration-300 leading-tight"
-                >
-                  {{ service.title }}
-                </h3>
               </div>
             </div>
-          </div>
-        }
-      </div>
-    } @else {
-      <!-- Skeleton Loading Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        @for (i of [1, 2, 3, 4, 5, 6]; track i) {
-          <div class="bg-cream-50/50 p-8 rounded-[2rem] animate-pulse border border-cream-100">
-            <div class="w-12 h-12 bg-cream-100 rounded-xl mb-6"></div>
-            <div class="h-5 bg-cream-100 rounded-full w-2/3 mb-4"></div>
-            <div class="h-3 bg-cream-100 rounded-full w-full mb-2"></div>
-            <div class="h-3 bg-cream-100 rounded-full w-4/5"></div>
-          </div>
-        }
-      </div>
+          }
+        </div>
+      }
+      @default {
+        <!-- Skeleton Loading Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" aria-hidden="true">
+          @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+            <div class="bg-cream-50/50 p-8 rounded-[2rem] animate-pulse border border-cream-100">
+              <div class="w-12 h-12 bg-cream-100 rounded-xl mb-6"></div>
+              <div class="h-5 bg-cream-100 rounded-full w-2/3 mb-4"></div>
+              <div class="h-3 bg-cream-100 rounded-full w-full mb-2"></div>
+              <div class="h-3 bg-cream-100 rounded-full w-4/5"></div>
+            </div>
+          }
+        </div>
+      }
     }
   </div>
 
@@ -81,9 +108,10 @@
         <!-- Close Button -->
         <button
           (click)="closeModal()"
+          aria-label="بستن جزئیات خدمت"
           class="absolute top-6 left-6 w-10 h-10 rounded-xl bg-cream-100 flex items-center justify-center text-emerald-800 border border-cream-200 hover:bg-emerald-800 hover:text-white hover:rotate-90 transition-all duration-500 z-10"
         >
-          <i class="fas fa-times text-lg"></i>
+          <i class="fas fa-times text-lg" aria-hidden="true"></i>
         </button>
 
         <div class="p-6 md:p-12">
@@ -91,7 +119,7 @@
             <div
               class="w-20 h-20 rounded-3xl bg-cream-100 border border-cream-200 flex items-center justify-center text-3xl text-emerald-800 mb-5 shadow-inner ring-6 ring-cream-100/50"
             >
-              <i [ngClass]="['fas', 'fa-fw', 'fa-eye', 'text-emerald-700']"></i>
+              <i [ngClass]="['fas', 'fa-fw', 'fa-eye', 'text-emerald-700']" aria-hidden="true"></i>
             </div>
             <h2 class="text-2xl md:text-3xl font-extrabold text-emerald-900 mb-3">
               {{ service.title }}
@@ -111,7 +139,7 @@
               (click)="closeModal()"
               class="w-full py-4 bg-emerald-800 text-cream-50 border border-emerald-700 rounded-3xl font-bold text-base hover:bg-emerald-700 hover:scale-[1.01] active:scale-95 transition-all duration-300 shadow-lg shadow-emerald-900/15 flex items-center justify-center gap-2"
             >
-              <i class="fas fa-check-circle text-amber-300"></i>
+              <i class="fas fa-check-circle text-amber-300" aria-hidden="true"></i>
               متوجه شدم
             </button>
           </div>

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/auth';
@@ -14,6 +14,10 @@ import { AuthService } from '../../core/auth';
 export class Sidebar {
   private authService = inject(AuthService);
   private router = inject(Router);
+
+  /** Controls the drawer state below the `lg` breakpoint. */
+  readonly open = input(false);
+  readonly closed = output<void>();
 
   menuItems = [
     { path: '/admin-panel', label: 'پیشخوان', icon: 'fas fa-th-large' },

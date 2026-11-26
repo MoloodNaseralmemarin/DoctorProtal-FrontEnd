@@ -1,4 +1,5 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { ViewportScroller } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 
 
@@ -10,4 +11,14 @@ import { RouterOutlet } from '@angular/router';
 })
 export class App {
   protected readonly title = signal('DocPortal');
+
+  /**
+   * The public header is sticky (77px on mobile, 87px on desktop), so anchored
+   * sections have to stop below it. The router's anchor scrolling positions by
+   * element offset and ignores CSS `scroll-margin-top`, so the offset is
+   * registered on the ViewportScroller instead.
+   */
+  constructor() {
+    inject(ViewportScroller, { optional: true })?.setOffset([0, 96]);
+  }
 }

@@ -14,6 +14,32 @@ body {
   color: #1e293b; /* Slate-800 for high-end readability */
 }
 
+/* Anchor navigation -------------------------------------------------------- */
+html {
+  scroll-behavior: smooth;
+}
+
+/*
+ * The public header is sticky, so anchored sections need to stop below it
+ * instead of being hidden underneath. The header is ~76px tall on mobile and
+ * ~116px on desktop once the contact top bar is included.
+ */
+:is(#home, #services, #education, #gallery, #articles, #doctorProfile, #footer) {
+  scroll-margin-top: 6rem;
+}
+
+@media (min-width: 768px) {
+  :is(#home, #services, #education, #gallery, #articles, #doctorProfile, #footer) {
+    scroll-margin-top: 6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 @theme {
   --color-cream-50: #faf9f5;  /* Warm elegant cream */
   --color-cream-100: #f5f2e6; /* Deeper rich cream */

@@ -20,7 +20,8 @@
       <!-- Brand -->
       <div class="sm:col-span-2 lg:col-span-4 min-w-0">
         <a
-          href="#home"
+          routerLink="/"
+          fragment="home"
           class="inline-flex items-center gap-3.5 sm:gap-4 mb-5 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-4 focus-visible:ring-offset-emerald-950"
         >
           <span
@@ -82,7 +83,8 @@
         <ul class="grid gap-x-6 gap-y-3 sm:grid-cols-2 lg:grid-cols-1">
           <li *ngFor="let service of footer?.services">
             <a
-              href="#services"
+              routerLink="/"
+              fragment="services"
               class="group flex items-center gap-2 py-1 text-[13px] sm:text-sm font-medium leading-6 text-emerald-100/80 hover:text-amber-300 transition-colors rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-emerald-950"
             >
               <i
@@ -125,7 +127,7 @@
 
           <div class="relative mb-6">
             <p
-              *ngFor="let line of address.lines"
+              *ngFor="let line of addressLines"
               class="text-[13px] sm:text-sm leading-7 text-emerald-100/85 font-medium break-words"
             >
               {{ line }}
@@ -142,7 +144,7 @@
 
             <div class="grid grid-cols-1 gap-2.5">
               <a
-                [href]="'tel:' + address.phone.landline"
+                [href]="'tel:' + clinicPhones.landline.dial"
                 class="group flex items-center gap-3 rounded-xl bg-emerald-950/60 border border-emerald-800/70 px-3.5 py-3 hover:bg-emerald-950 hover:border-amber-400/40 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-emerald-950"
               >
                 <span
@@ -156,13 +158,13 @@
                     dir="ltr"
                     class="text-sm sm:text-base font-bold text-cream-50 tabular-nums tracking-wide group-hover:text-amber-300 transition-colors"
                   >
-                    {{ address.phone.landline }}
+                    {{ clinicPhones.landline.label }}
                   </span>
                 </span>
               </a>
 
               <a
-                [href]="'tel:' + address.phone.mobile"
+                [href]="'tel:' + clinicPhones.mobile.dial"
                 class="group flex items-center gap-3 rounded-xl bg-emerald-950/60 border border-emerald-800/70 px-3.5 py-3 hover:bg-emerald-950 hover:border-amber-400/40 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-emerald-950"
               >
                 <span
@@ -176,7 +178,7 @@
                     dir="ltr"
                     class="text-sm sm:text-base font-bold text-cream-50 tabular-nums tracking-wide group-hover:text-amber-300 transition-colors"
                   >
-                    {{ address.phone.mobile }}
+                    {{ clinicPhones.mobile.label }}
                   </span>
                 </span>
               </a>

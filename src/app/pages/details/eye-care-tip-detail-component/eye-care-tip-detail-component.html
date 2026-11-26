@@ -1,6 +1,6 @@
 <div class="bg-cream-50 min-h-screen pb-24" dir="rtl">
 
-  @if (tip$ | async; as tip) {
+  @if (tip(); as tip) {
     <!-- Article Hero Section -->
     <section class="relative bg-emerald-950 py-24 overflow-hidden border-b border-cream-100">
       <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,var(--tw-gradient-from)_0%,transparent_70%)] from-amber-500"></div>
@@ -10,7 +10,7 @@
         <!-- Breadcrumbs -->
         <nav class="flex items-center justify-center gap-2 text-emerald-100 text-xs font-semibold tracking-wide mb-8">
           <a routerLink="/" class="hover:text-amber-300 transition-colors">صفحه اصلی</a>
-          <i class="fas fa-chevron-left text-[8px] text-amber-500"></i>
+          <i class="fas fa-chevron-left text-[8px] text-amber-500" aria-hidden="true"></i>
           <span class="text-amber-200">جزییات راهنما</span>
         </nav>
 
@@ -20,11 +20,11 @@
 
         <div class="flex items-center justify-center gap-6 text-emerald-200 text-xs font-medium">
           <div class="flex items-center gap-2">
-            <i class="fas fa-calendar-alt text-amber-400"></i>
+            <i class="fas fa-calendar-alt text-amber-400" aria-hidden="true"></i>
             <span>به‌روزرسانی شده در خرداد ۱۴۰۳</span>
           </div>
           <div class="flex items-center gap-2">
-            <i class="fas fa-clock text-amber-400"></i>
+            <i class="fas fa-clock text-amber-400" aria-hidden="true"></i>
             <span>زمان مطالعه: ۵ دقیقه</span>
           </div>
         </div>
@@ -45,17 +45,17 @@
               {{ tip.title }}
             </p>
 
-
             <div class="w-16 h-1 bg-slate-300 rounded-full mb-10"></div>
-     <div
-            class="text-base md:text-[17px] text-slate-600 leading-[2] text-justify ps-8 border-r-4 border-slate-300"
-            [innerHTML]="tip.bodyText">
-            </div>       </div>
+            <div
+              class="text-base md:text-[17px] text-slate-600 leading-[2] text-justify ps-8 border-r-4 border-slate-300"
+              [innerHTML]="tip.bodyText">
+            </div>
+          </div>
 
           <!-- Actions -->
           <div class="mt-14 pt-10 border-t border-cream-200 flex flex-col md:flex-row items-center justify-center gap-6">
             <a routerLink="/" fragment="education" class="flex items-center gap-3 py-4 px-10 bg-emerald-800 text-cream-50 font-bold text-sm rounded-3xl hover:bg-emerald-700 hover:scale-[1.01] active:scale-95 border border-emerald-700 transition-all shadow-lg shadow-emerald-900/10 group">
-              <i class="fas fa-arrow-right text-[10px] text-amber-300 transform group-hover:translate-x-2 transition-transform duration-300"></i>
+              <i class="fas fa-arrow-right text-[10px] text-amber-300 transform group-hover:translate-x-2 transition-transform duration-300" aria-hidden="true"></i>
               <span>بازگشت به صفحه اصلی</span>
             </a>
           </div>
@@ -65,11 +65,43 @@
       </div>
     </div>
   } @else {
-    <!-- Loading State -->
-    <div class="flex flex-col items-center justify-center py-40 bg-cream-50">
-      <div class="w-10 h-10 border-3 border-emerald-700 border-t-transparent rounded-full animate-spin mb-4"></div>
-      <p class="text-emerald-800 font-bold text-xs">در حال بارگذاری راهنما...</p>
-    </div>
+    @switch (status()) {
+      @case ('error') {
+        <div class="flex flex-col items-center justify-center py-40 bg-cream-50 px-6 text-center" role="alert">
+          <i class="fas fa-exclamation-circle text-amber-500 text-3xl mb-4" aria-hidden="true"></i>
+          <p class="text-emerald-900 font-bold text-sm mb-6">دریافت این راهنما با خطا مواجه شد.</p>
+          <div class="flex flex-col sm:flex-row items-center gap-3">
+            <button
+              type="button"
+              (click)="load()"
+              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-800 text-cream-50 text-xs font-bold hover:bg-emerald-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2"
+            >
+              <i class="fas fa-redo" aria-hidden="true"></i>
+              تلاش دوباره
+            </button>
+            <a routerLink="/" fragment="education" class="px-5 py-2.5 rounded-xl border border-cream-200 text-emerald-900 text-xs font-bold hover:bg-cream-100 transition-colors">
+              بازگشت به نکات مراقبتی
+            </a>
+          </div>
+        </div>
+      }
+      @case ('notfound') {
+        <div class="flex flex-col items-center justify-center py-40 bg-cream-50 px-6 text-center">
+          <i class="fas fa-info-circle text-emerald-600/40 text-3xl mb-4" aria-hidden="true"></i>
+          <p class="text-emerald-900 font-bold text-sm mb-6">مطلب مورد نظر پیدا نشد.</p>
+          <a routerLink="/" fragment="education" class="px-5 py-2.5 rounded-xl bg-emerald-800 text-cream-50 text-xs font-bold hover:bg-emerald-700 transition-colors">
+            بازگشت به نکات مراقبتی
+          </a>
+        </div>
+      }
+      @default {
+        <!-- Loading State -->
+        <div class="flex flex-col items-center justify-center py-40 bg-cream-50">
+          <div class="w-10 h-10 border-3 border-emerald-700 border-t-transparent rounded-full animate-spin mb-4"></div>
+          <p class="text-emerald-800 font-bold text-xs">در حال بارگذاری راهنما...</p>
+        </div>
+      }
+    }
   }
 
 </div>
