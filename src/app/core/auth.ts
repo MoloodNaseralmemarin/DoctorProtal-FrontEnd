@@ -4,10 +4,10 @@ import { map, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-  private readonly apiUrl = `${environment.apiUrl}/Auth`;
+  private readonly apiUrl = `${environment.apiUrl}/login`;
   private readonly tokenKey = 'token';
 
   constructor(private http: HttpClient) {}
