@@ -40,6 +40,118 @@ html {
   }
 }
 
+/*
+ * Rendered rich text (CMS content). Tailwind's preflight removes list markers
+ * and heading sizes, so the editor output needs its own typography rules.
+ */
+.rich-text-content > :first-child {
+  margin-top: 0;
+}
+
+.rich-text-content > :last-child {
+  margin-bottom: 0;
+}
+
+.rich-text-content > * + * {
+  margin-top: 0.75em;
+}
+
+.rich-text-content h2,
+.rich-text-content h3,
+.rich-text-content h4,
+.rich-text-content h5,
+.rich-text-content h6 {
+  color: #064e3b;
+  font-weight: 700;
+  line-height: 1.6;
+  margin-top: 1.25em;
+}
+
+.rich-text-content h2 {
+  font-size: 1.35em;
+}
+
+.rich-text-content h3 {
+  font-size: 1.2em;
+}
+
+.rich-text-content h4 {
+  font-size: 1.08em;
+}
+
+.rich-text-content ul {
+  list-style: disc;
+  padding-inline-start: 1.5rem;
+}
+
+.rich-text-content ol {
+  list-style: decimal;
+  padding-inline-start: 1.5rem;
+}
+
+.rich-text-content li::marker {
+  color: #059669;
+}
+
+.rich-text-content a {
+  color: #047857;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.rich-text-content a:hover {
+  color: #065f46;
+}
+
+.rich-text-content blockquote {
+  border-inline-start: 4px solid #ebdcb9;
+  padding-inline-start: 1rem;
+  color: #475569;
+  font-style: italic;
+}
+
+.rich-text-content hr {
+  border: 0;
+  border-top: 1px solid #ebdcb9;
+  margin: 1.5em 0;
+}
+
+.rich-text-content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95em;
+}
+
+.rich-text-content th,
+.rich-text-content td {
+  border: 1px solid #e2e8f0;
+  padding: 0.5rem 0.75rem;
+  text-align: start;
+  vertical-align: top;
+}
+
+.rich-text-content th {
+  background-color: #f5f2e6;
+  font-weight: 700;
+}
+
+.rich-text-content figure {
+  margin: 1.25em 0;
+}
+
+.rich-text-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+}
+
+.rich-text-content figcaption {
+  color: #64748b;
+  font-size: 0.85em;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
 @theme {
   --color-cream-50: #faf9f5;  /* Warm elegant cream */
   --color-cream-100: #f5f2e6; /* Deeper rich cream */

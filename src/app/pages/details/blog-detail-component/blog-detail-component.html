@@ -57,8 +57,8 @@
             <div class="w-16 h-1 bg-amber-500 rounded-full mb-10"></div>
 
             <div
-              class="text-slate-700 text-base md:text-lg leading-relaxed text-justify font-medium"
-              [innerHTML]="blog.bodyText || blog.description">
+              class="rich-text-content text-slate-700 text-base md:text-lg leading-relaxed text-justify font-medium"
+              [innerHTML]="(blog.bodyText || blog.description) | richText">
             </div>
           </div>
 

@@ -1,16 +1,15 @@
 import { Component, OnInit, ChangeDetectorRef, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-import { DecoupledEditor } from 'ckeditor5';
 import { EyeCareTipService } from '../../../services/eye-care-tip-service';
 import { EyeCareTip } from '../../../../models/eye-care-tip.model';
 import { ToastService } from '../../../services/toast.service';
+import { RichTextEditorComponent } from '../../../shared/rich-text-editor/rich-text-editor';
 
 @Component({
   selector: 'app-admin-eye-care-tip-component',
   standalone: true,
-  imports: [CommonModule, FormsModule, CKEditorModule],
+  imports: [CommonModule, FormsModule, RichTextEditorComponent],
   templateUrl: './admin-eye-care-tip-component.html',
   styleUrl: './admin-eye-care-tip-component.css',
 })
@@ -18,13 +17,6 @@ export class AdminEyeCareTipComponent implements OnInit {
   private readonly service = inject(EyeCareTipService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly toastService = inject(ToastService);
-
-  public Editor = DecoupledEditor;
-  public editorConfig = {
-    placeholder: 'توضیحات نکته را اینجا بنویسید...',
-    language: 'fa',
-    contentsLangDirection: 'rtl'
-  };
 
   tips = signal<EyeCareTip[]>([]);
   isLoading = signal(false);
@@ -65,15 +57,6 @@ export class AdminEyeCareTipComponent implements OnInit {
 
   ngOnInit(): void {
     this.load();
-  }
-
-  public onReady(editor: any): void {
-    const editable = editor?.ui?.getEditableElement();
-    const toolbar = editor?.ui?.view?.toolbar?.element;
-
-    if (editable?.parentElement && toolbar) {
-      editable.parentElement.insertBefore(toolbar, editable);
-    }
   }
 
   load(): void {

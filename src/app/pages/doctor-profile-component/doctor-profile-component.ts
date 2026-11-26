@@ -3,11 +3,12 @@ import { DoctorProfile } from '../../../models/doctor-profile.model';
 import { DoctorProfileService } from '../../services/doctor-profile-service';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../environments/environment';
+import { RichTextPipe } from '../../shared/rich-text';
 
 @Component({
   selector: 'app-doctor-profile-component',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RichTextPipe],
   templateUrl: './doctor-profile-component.html',
   styleUrl: './doctor-profile-component.css',
 })

@@ -5,5 +5,6 @@ export const environment = {
   doctorImagePath:'/assets/images/doctorProfile/',
   galleryImagePath:'/assets/images/galleryImages/',
   eyeCareImagePath:'/assets/images/eye-Care/',
-
+  // Use 'GPL' for the self-hosted open-source build, or a commercial CKEditor key.
+  ckeditorLicenseKey: 'GPL',
 };

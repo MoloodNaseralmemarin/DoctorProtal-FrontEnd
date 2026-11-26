@@ -43,15 +43,12 @@
                 <i class="fas fa-info-circle text-emerald-500 text-xs"></i>
                 بیوگرافی و اطلاعات مطب
               </label>
-              <div class="relative">
-                <textarea
-                  [(ngModel)]="doctor.clinicInfo"
-                  name="clinicInfo"
-                  rows="8"
-                  class="w-full bg-slate-50 border border-slate-100 rounded-4xl px-5 py-4 text-slate-700 font-medium leading-relaxed focus:bg-white focus:border-emerald-400 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all resize-none custom-scrollbar"
-                  placeholder="تخصص، سوابق و آدرس مطب را وارد کنید..."
-                ></textarea>
-              </div>
+              <app-rich-text-editor
+                [(ngModel)]="doctor.clinicInfo"
+                name="clinicInfo"
+                minHeight="18rem"
+                placeholder="تخصص، سوابق و آدرس مطب را وارد کنید..."
+              ></app-rich-text-editor>
             </div>
 
             <!-- Actions -->
@@ -103,9 +100,16 @@
             </p>
           </div>
           <div class="w-full h-px bg-slate-50 mx-auto"></div>
-          <p class="text-slate-400 text-xs leading-relaxed line-clamp-4 min-h-16">
-            {{ doctor.clinicInfo || 'اطلاعات مطب هنوز وارد نشده است...' }}
-          </p>
+          @if (doctor.clinicInfo) {
+            <div
+              class="rich-text-content text-slate-400 text-xs leading-relaxed line-clamp-4 min-h-16 text-right"
+              [innerHTML]="doctor.clinicInfo | richText"
+            ></div>
+          } @else {
+            <p class="text-slate-400 text-xs leading-relaxed min-h-16">
+              اطلاعات مطب هنوز وارد نشده است...
+            </p>
+          }
         </div>
       </div>
 

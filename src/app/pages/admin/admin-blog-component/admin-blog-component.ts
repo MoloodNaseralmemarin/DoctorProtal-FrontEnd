@@ -8,12 +8,11 @@ import {
 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-import { DecoupledEditor } from 'ckeditor5';
 
 import { Blog } from '../../../../models/blog.model';
 import { BlogService } from '../../../services/blog-service';
 import { ToastService } from '../../../services/toast.service';
+import { RichTextEditorComponent } from '../../../shared/rich-text-editor/rich-text-editor';
 
 
 @Component({
@@ -22,7 +21,7 @@ import { ToastService } from '../../../services/toast.service';
   imports: [
     CommonModule,
     FormsModule,
-    CKEditorModule
+    RichTextEditorComponent
   ],
   templateUrl: './admin-blog-component.html',
   styleUrl: './admin-blog-component.css'
@@ -33,18 +32,6 @@ export class AdminBlogComponent implements OnInit {
   private readonly service = inject(BlogService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly toastService = inject(ToastService);
-
-
-  public Editor = DecoupledEditor;
-
-
-  public editorConfig = {
-    placeholder: 'متن کامل مقاله را اینجا بنویسید...',
-    language: 'fa',
-    contentsLangDirection: 'rtl'
-  };
-
-
   blogs = signal<Blog[]>([]);
 
   isLoading = signal(false);
@@ -88,20 +75,6 @@ export class AdminBlogComponent implements OnInit {
   ngOnInit(): void {
     this.load();
   }
-
-
-
-  onReady(editor: any): void {
-    const editable = editor?.ui?.getEditableElement();
-    const toolbar = editor?.ui?.view?.toolbar?.element;
-
-    if (editable?.parentElement && toolbar) {
-      editable.parentElement.insertBefore(toolbar, editable);
-    }
-  }
-
-
-
 
   load(): void {
 

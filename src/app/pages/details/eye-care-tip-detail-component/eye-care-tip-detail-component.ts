@@ -4,13 +4,14 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { EyeCareTipService } from '../../../services/eye-care-tip-service';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { RichTextPipe } from '../../../shared/rich-text';
 
 type ArticleState = 'loading' | 'ready' | 'error' | 'notfound';
 
 @Component({
   selector: 'app-eye-care-tip-detail-component',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, RichTextPipe],
   templateUrl: './eye-care-tip-detail-component.html',
   styleUrl: './eye-care-tip-detail-component.css',
 })

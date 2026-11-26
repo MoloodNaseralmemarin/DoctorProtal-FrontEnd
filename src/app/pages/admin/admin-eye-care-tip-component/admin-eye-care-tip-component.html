@@ -57,15 +57,12 @@
 
         <div class="space-y-2">
           <label class="text-sm font-bold text-slate-700 mr-2">شرح نکته</label>
-          <div class="ck-editor-container border border-slate-100 rounded-[2rem] overflow-hidden bg-slate-50">
-            <ckeditor
-              [editor]="Editor"
-              [config]="editorConfig"
-              [(ngModel)]="model.bodyText"
-              name="bodyText"
-              (ready)="onReady($event)"
-            ></ckeditor>
-          </div>
+          <app-rich-text-editor
+            [(ngModel)]="model.bodyText"
+            name="bodyText"
+            minHeight="14rem"
+            placeholder="توضیحات نکته را اینجا بنویسید..."
+          ></app-rich-text-editor>
         </div>
 
         <div class="pt-6 border-t border-slate-50 flex items-center justify-end gap-4">

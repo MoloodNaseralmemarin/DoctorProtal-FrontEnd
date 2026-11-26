@@ -47,8 +47,8 @@
 
             <div class="w-16 h-1 bg-slate-300 rounded-full mb-10"></div>
             <div
-              class="text-base md:text-[17px] text-slate-600 leading-[2] text-justify ps-8 border-r-4 border-slate-300"
-              [innerHTML]="tip.bodyText">
+              class="rich-text-content text-base md:text-[17px] text-slate-600 leading-[2] text-justify ps-8 border-r-4 border-slate-300"
+              [innerHTML]="tip.bodyText | richText">
             </div>
           </div>
 

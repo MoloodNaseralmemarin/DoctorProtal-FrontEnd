@@ -4,13 +4,14 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { BlogService } from '../../../services/blog-service';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { RichTextPipe } from '../../../shared/rich-text';
 
 type ArticleState = 'loading' | 'ready' | 'error' | 'notfound';
 
 @Component({
   selector: 'app-blog-detail-component',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, RichTextPipe],
   templateUrl: './blog-detail-component.html',
   styleUrl: './blog-detail-component.css',
 })

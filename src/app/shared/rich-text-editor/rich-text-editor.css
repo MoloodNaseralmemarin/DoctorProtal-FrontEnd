@@ -1,0 +1,66 @@
+/* The CKEditor theme is loaded globally in angular.json. */
+
+:host {
+  display: block;
+}
+
+/*
+ * CKEditor builds its DOM at runtime, so these rules have to pierce the
+ * component's style encapsulation.
+ */
+:host ::ng-deep .ck.ck-editor {
+  width: 100%;
+}
+
+:host ::ng-deep .ck.ck-toolbar {
+  flex-wrap: wrap;
+  border-color: var(--color-slate-100, #f1f5f9);
+  border-start-start-radius: 1.5rem;
+  border-start-end-radius: 1.5rem;
+  background-color: var(--color-slate-50, #f8fafc);
+}
+
+:host ::ng-deep .ck.ck-toolbar .ck-toolbar__items {
+  flex-wrap: wrap;
+}
+
+:host ::ng-deep .ck.ck-editor__main > .ck-editor__editable {
+  min-height: var(--rich-text-min-height, 16rem);
+  max-height: 34rem;
+  overflow-y: auto;
+  border-color: var(--color-slate-100, #f1f5f9);
+  border-end-start-radius: 1.5rem;
+  border-end-end-radius: 1.5rem;
+  background-color: var(--color-slate-50, #f8fafc);
+  padding: 1rem 1.25rem;
+  font-family: 'IranSans', sans-serif;
+  line-height: 1.9;
+}
+
+:host ::ng-deep .ck.ck-editor__editable.ck-focused {
+  border-color: var(--color-emerald-400, #34d399);
+  box-shadow: 0 0 0 4px rgb(16 185 129 / 0.05);
+  background-color: #fff;
+}
+
+:host ::ng-deep .ck.ck-editor__editable_inline > :first-child {
+  margin-top: 0;
+}
+
+:host ::ng-deep .ck.ck-editor__editable_inline > :last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 640px) {
+  :host ::ng-deep .ck.ck-toolbar {
+    border-start-start-radius: 1rem;
+    border-start-end-radius: 1rem;
+  }
+
+  :host ::ng-deep .ck.ck-editor__main > .ck-editor__editable {
+    min-height: 12rem;
+    border-end-start-radius: 1rem;
+    border-end-end-radius: 1rem;
+    padding: 0.75rem 1rem;
+  }
+}

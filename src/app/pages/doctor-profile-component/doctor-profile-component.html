@@ -77,8 +77,8 @@
 
            <div class="relative mb-10">
              <div
-               class="text-base md:text-[17px] text-slate-600 leading-[2] text-justify whitespace-pre-line ps-8 border-r-4 border-amber-500"
-               [innerHTML]="doctor.clinicInfo"
+               class="rich-text-content text-base md:text-[17px] text-slate-600 leading-[2] text-justify ps-8 border-r-4 border-amber-500"
+               [innerHTML]="doctor.clinicInfo | richText"
              ></div>
 
             <!-- Features Grid -->

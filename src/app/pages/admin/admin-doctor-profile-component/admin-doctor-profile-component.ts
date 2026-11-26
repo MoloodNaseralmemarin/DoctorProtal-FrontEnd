@@ -4,10 +4,12 @@ import { DoctorProfile } from '../../../../models/doctor-profile.model';
 import { DoctorProfileService } from '../../../services/doctor-profile-service';
 import { FormsModule } from '@angular/forms';
 import { ToastService } from '../../../services/toast.service';
+import { RichTextEditorComponent } from '../../../shared/rich-text-editor/rich-text-editor';
+import { RichTextPipe } from '../../../shared/rich-text';
 
 @Component({
   selector: 'app-admin-doctor-profile-component',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RichTextEditorComponent, RichTextPipe],
   standalone: true,
   templateUrl: './admin-doctor-profile-component.html',
   styleUrl: './admin-doctor-profile-component.css',
