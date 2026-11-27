@@ -1,7 +1,11 @@
 export interface Blog {
-  id: number;
+  id?: number;
   title: string;
   description: string;
-  bodyText: string;
+  bodyText?: string | null;
+  imageUrl?: string | null;
   isActive: boolean;
+  isDeleted?: boolean;
+  createdAt?: string;
+  updatedAt?: string | null;
 }

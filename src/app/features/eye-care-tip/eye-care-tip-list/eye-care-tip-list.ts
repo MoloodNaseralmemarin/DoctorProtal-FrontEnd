@@ -48,7 +48,7 @@ export class EyeCareTipListComponent implements OnInit {
     this.status.set('loading');
 
     this.service
-      .getAll(this.pageNumber(), PAGE_SIZE)
+      .getPublicAll(this.pageNumber(), PAGE_SIZE)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (result) => {

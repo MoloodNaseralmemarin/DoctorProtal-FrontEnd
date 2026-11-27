@@ -3,10 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, map, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
-/** ASP.NET Core expects PascalCase members for this DTO. */
+/** Shape documented by `POST /api/Auth` in Swagger. */
 interface LoginRequest {
-  UserName: string;
-  Password: string;
+  userName: string;
+  password: string;
 }
 
 interface JwtPayload {
@@ -18,11 +18,11 @@ interface JwtPayload {
 })
 export class AuthService {
   private readonly http = inject(HttpClient);
-  private readonly loginUrl = `${environment.apiUrl}/login`;
+  private readonly loginUrl = `${environment.apiUrl}/Auth`;
   private readonly tokenKey = 'token';
 
   login(userName: string, password: string): Observable<string> {
-    const body: LoginRequest = { UserName: userName, Password: password };
+    const body: LoginRequest = { userName, password };
 
     return this.http
       .post(this.loginUrl, body, { responseType: 'text' })

@@ -7,7 +7,7 @@ import { SiteBannerDto } from '../../../core/models/site-banner.model';
 import { environment } from '../../../../environments/environment';
 import { apiErrorMessage } from '../../../core/http/api-error';
 
-/** Replaces the home-page banner image and caption. */
+/** Replaces the home-page banner image. */
 @Component({
   selector: 'app-banner-upload',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,18 +26,13 @@ export class AdminBannerUploadComponent implements OnInit {
   protected readonly photoPreview = signal<string | null>(null);
   protected readonly isSubmitting = signal(false);
 
-  private caption = '';
-
   ngOnInit(): void {
     this.loadCurrentBanner();
   }
 
   protected loadCurrentBanner(): void {
     this.bannerService.getBanner().subscribe({
-      next: (banner) => {
-        this.currentBanner.set(banner);
-        this.caption = banner?.caption ?? '';
-      },
+      next: (banner) => this.currentBanner.set(banner),
       error: (error: unknown) => this.toast.error(apiErrorMessage(error)),
     });
   }
@@ -72,7 +67,7 @@ export class AdminBannerUploadComponent implements OnInit {
 
     this.isSubmitting.set(true);
 
-    this.bannerService.updateBanner(file, this.caption).subscribe({
+    this.bannerService.updateBanner(file).subscribe({
       next: () => {
         this.toast.success('بنر با موفقیت ذخیره شد');
         this.clearSelection();

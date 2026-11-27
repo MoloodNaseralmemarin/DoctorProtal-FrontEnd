@@ -26,7 +26,6 @@ export class SiteBannerComponent implements OnInit {
   protected readonly pathImageSiteBanner = environment.siteBannerImagePath;
   protected readonly state = signal<BannerState>('loading');
   protected readonly bannerUrl = signal<string | null>(null);
-  protected readonly caption = signal('');
   protected readonly imageLoaded = signal(false);
 
   /** Fallback so the home page always exposes a meaningful <h1>. */
@@ -48,7 +47,6 @@ export class SiteBannerComponent implements OnInit {
         next: (banner) => {
           const url = banner?.imageUrl?.trim() ?? '';
 
-          this.caption.set(banner?.caption?.trim() ?? '');
           this.bannerUrl.set(url || null);
           this.state.set(url ? 'ready' : 'empty');
         },

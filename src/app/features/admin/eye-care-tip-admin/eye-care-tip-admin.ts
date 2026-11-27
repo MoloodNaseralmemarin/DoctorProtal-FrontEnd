@@ -81,7 +81,7 @@ export class AdminEyeCareTipComponent implements OnInit {
 
   protected load(): void {
     // The admin screen paginates locally, so fetch a large enough page.
-    this.service.getAll(1, 100).subscribe({
+    this.service.getAdminAll(1, 100).subscribe({
       next: (result) => this.tips.set(result.items),
       error: (error: unknown) => this.toast.error(apiErrorMessage(error)),
     });
@@ -108,7 +108,7 @@ export class AdminEyeCareTipComponent implements OnInit {
     // The list cards use `description`; derive it from the body when the
     // administrator did not provide a separate summary.
     if (!this.model.description?.trim()) {
-      this.model.description = this.toPlainText(this.model.bodyText);
+      this.model.description = this.toPlainText(this.model.bodyText ?? '');
     }
 
     this.isSubmitting.set(true);

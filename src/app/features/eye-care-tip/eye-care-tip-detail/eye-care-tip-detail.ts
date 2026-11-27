@@ -39,7 +39,7 @@ export class EyeCareTipDetailComponent implements OnInit {
     this.status.set('loading');
 
     this.service
-      .getById(id)
+      .getPublicById(id)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (tip) => {

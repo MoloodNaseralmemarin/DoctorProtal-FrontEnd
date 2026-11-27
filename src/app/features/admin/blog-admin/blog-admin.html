@@ -25,7 +25,7 @@
   <div *ngIf="showForm()" class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden mb-10 animate-in zoom-in-95 duration-300">
     <div class="p-8 sm:p-10">
       <div class="flex items-center justify-between mb-8">
-        <h3 class="text-xl font-black text-slate-800">{{ editingId() ? 'ویرایش مقاله' : 'ثبت مقاله جدید' }}</h3>
+        <h3 class="text-xl font-black text-slate-800">ثبت مقاله جدید</h3>
         <button (click)="reset()" class="text-slate-400 hover:text-slate-600 transition-colors">
           <i class="fas fa-times text-xl"></i>
         </button>
@@ -90,7 +90,7 @@
           >
             <div class="relative z-10 flex items-center gap-3">
               <i class="fas" [class.fa-save]="!isSubmitting()" [class.fa-circle-notch]="isSubmitting()" [class.animate-spin]="isSubmitting()"></i>
-              <span>{{ editingId() ? 'بروزرسانی مقاله' : 'انتشار مقاله' }}</span>
+              <span>انتشار مقاله</span>
             </div>
           </button>
         </div>
@@ -138,7 +138,7 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-50">
-            <tr *ngFor="let blog of blogs()" class="hover:bg-slate-50/50 transition-colors group">
+            <tr *ngFor="let blog of paginatedBlogs()" class="hover:bg-slate-50/50 transition-colors group">
               <td class="px-8 py-6">
                 <span class="text-sm font-bold text-slate-800 group-hover:text-emerald-700 transition-colors">{{ blog.title }}</span>
               </td>
@@ -159,7 +159,7 @@
                 </div>
               </td>
             </tr>
-            <tr *ngIf="blogs().length === 0">
+            <tr *ngIf="paginatedBlogs().length === 0">
               <td colspan="3" class="px-8 py-20 text-center">
                 <div class="flex flex-col items-center gap-4">
                   <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-slate-200">
@@ -176,7 +176,7 @@
       <!-- Pagination -->
       <div *ngIf="totalPages() > 1" class="p-6 bg-slate-50/30 border-t border-slate-50 flex items-center justify-between">
         <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-          نمایش {{ rangeStart() }} تا {{ rangeEnd() }} از {{ totalCount() }} مقاله
+          نمایش {{ rangeStart() }} تا {{ rangeEnd() }} از {{ filteredBlogs().length }} مقاله
         </span>
 
         <div class="flex items-center gap-2">

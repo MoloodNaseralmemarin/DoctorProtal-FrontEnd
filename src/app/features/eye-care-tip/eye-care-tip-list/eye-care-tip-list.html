@@ -44,7 +44,7 @@
 
           <img
             *ngIf="tip.imageUrl; else noTipImage"
-            [src]="eyeCareImagePath + tip.imageUrl"
+            [src]="eyeCareImagePath + (tip.imageUrl || '')"
             [alt]="tip.title"
             class="w-full h-56 object-cover transition-transform duration-700 group-hover:scale-110">
 

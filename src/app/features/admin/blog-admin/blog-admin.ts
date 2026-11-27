@@ -22,7 +22,11 @@ const EMPTY_MODEL: Partial<Blog> = {
   isActive: true,
 };
 
-/** Create/edit/delete blog articles. The list itself is paginated by the API. */
+/**
+ * Create blog articles. The list is fetched in one page and searched locally
+ * because the API exposes no title filter. Editing and deleting are not
+ * supported by the backend (there are no PUT/DELETE routes).
+ */
 @Component({
   selector: 'app-admin-blog',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -39,23 +43,37 @@ export class AdminBlogComponent implements OnInit {
   protected readonly searchTerm = signal('');
   protected readonly currentPage = signal(1);
   protected readonly pageSize = signal(5);
-  protected readonly totalCount = signal(0);
   protected readonly showForm = signal(false);
-  protected readonly editingId = signal<number | null>(null);
 
-  /** Template-driven form model; replaced as a whole when an article is edited. */
+  /** Template-driven form model; replaced as a whole after a successful save. */
   protected model: Partial<Blog> = { ...EMPTY_MODEL };
 
+  protected readonly filteredBlogs = computed(() => {
+    const term = this.searchTerm().trim().toLowerCase();
+
+    if (!term) {
+      return this.blogs();
+    }
+
+    return this.blogs().filter((blog) => (blog.title ?? '').toLowerCase().includes(term));
+  });
+
+  protected readonly paginatedBlogs = computed(() => {
+    const start = (this.currentPage() - 1) * this.pageSize();
+
+    return this.filteredBlogs().slice(start, start + this.pageSize());
+  });
+
   protected readonly totalPages = computed(() =>
-    Math.max(1, Math.ceil(this.totalCount() / this.pageSize())),
+    Math.max(1, Math.ceil(this.filteredBlogs().length / this.pageSize())),
   );
 
   protected readonly rangeStart = computed(() =>
-    this.totalCount() === 0 ? 0 : (this.currentPage() - 1) * this.pageSize() + 1,
+    this.filteredBlogs().length === 0 ? 0 : (this.currentPage() - 1) * this.pageSize() + 1,
   );
 
   protected readonly rangeEnd = computed(() =>
-    Math.min(this.currentPage() * this.pageSize(), this.totalCount()),
+    Math.min(this.currentPage() * this.pageSize(), this.filteredBlogs().length),
   );
 
   ngOnInit(): void {
@@ -63,30 +81,25 @@ export class AdminBlogComponent implements OnInit {
   }
 
   protected load(): void {
-    this.blogService.getAll(this.currentPage(), this.pageSize(), this.searchTerm()).subscribe({
-      next: (result) => {
-        this.blogs.set(result.items);
-        this.totalCount.set(result.totalCount);
-      },
+    // The admin screen paginates locally, so fetch a large enough page.
+    this.blogService.getAdminAll(1, 100).subscribe({
+      next: (result) => this.blogs.set(result.items),
       error: (error: unknown) => this.toast.error(apiErrorMessage(error)),
     });
   }
 
   protected search(): void {
     this.currentPage.set(1);
-    this.load();
   }
 
   protected startCreate(): void {
-    this.editingId.set(null);
     this.model = { ...EMPTY_MODEL };
     this.showForm.set(true);
   }
 
-  protected edit(blog: Blog): void {
-    this.editingId.set(blog.id);
-    this.model = { ...blog };
-    this.showForm.set(true);
+  /** No update endpoint exists; explain instead of opening a form that fails. */
+  protected edit(_blog: Blog): void {
+    this.toast.error('ویرایش مقاله در سرویس فعلی پشتیبانی نمی‌شود');
   }
 
   protected save(): void {
@@ -97,14 +110,9 @@ export class AdminBlogComponent implements OnInit {
 
     this.isSubmitting.set(true);
 
-    const id = this.editingId();
-    const request$ = id
-      ? this.blogService.update(id, this.model)
-      : this.blogService.create(this.model);
-
-    request$.subscribe({
+    this.blogService.create(this.model).subscribe({
       next: () => {
-        this.toast.success(id ? 'بروزرسانی با موفقیت انجام شد' : 'بلاگ جدید ثبت شد');
+        this.toast.success('بلاگ جدید ثبت شد');
         this.reset();
         this.load();
         this.isSubmitting.set(false);
@@ -116,41 +124,25 @@ export class AdminBlogComponent implements OnInit {
     });
   }
 
-  protected remove(id: number): void {
-    if (!confirm('آیا از حذف این بلاگ اطمینان دارید؟')) {
-      return;
-    }
-
-    this.blogService.delete(id).subscribe({
-      next: () => {
-        this.toast.success('بلاگ حذف شد');
-        this.load();
-      },
-      error: (error: unknown) => this.toast.error(apiErrorMessage(error)),
-    });
+  /** No delete endpoint exists; explain instead of issuing a 405 request. */
+  protected remove(_id?: number): void {
+    this.toast.error('حذف مقاله در سرویس فعلی پشتیبانی نمی‌شود');
   }
 
   protected reset(): void {
-    this.editingId.set(null);
     this.showForm.set(false);
     this.model = { ...EMPTY_MODEL };
   }
 
   protected prevPage(): void {
-    if (this.currentPage() <= 1) {
-      return;
+    if (this.currentPage() > 1) {
+      this.currentPage.update((page) => page - 1);
     }
-
-    this.currentPage.update((page) => page - 1);
-    this.load();
   }
 
   protected nextPage(): void {
-    if (this.currentPage() >= this.totalPages()) {
-      return;
+    if (this.currentPage() < this.totalPages()) {
+      this.currentPage.update((page) => page + 1);
     }
-
-    this.currentPage.update((page) => page + 1);
-    this.load();
   }
 }

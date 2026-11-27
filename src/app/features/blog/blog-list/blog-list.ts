@@ -30,7 +30,7 @@ export class BlogListComponent implements OnInit {
     this.status.set('loading');
 
     this.blogService
-      .getAll(1, 9)
+      .getPublicAll(1, 9)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (result) => {

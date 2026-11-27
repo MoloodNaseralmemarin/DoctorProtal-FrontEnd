@@ -10,7 +10,7 @@ import { environment } from '../../../environments/environment';
  */
 export const JwtInterceptor: HttpInterceptorFn = (req, next) => {
   const isApiRequest = req.url.startsWith(environment.apiUrl);
-  const isLoginRequest = req.url.endsWith('/login');
+  const isLoginRequest = req.url.endsWith('/Auth');
 
   if (!isApiRequest || isLoginRequest) {
     return next(req);

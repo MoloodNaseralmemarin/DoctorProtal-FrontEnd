@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { AuthService } from '../../core/auth/auth.service';
-import { apiErrorMessage } from '../../core/http/api-error';
+import { toApiError } from '../../core/http/api-error';
 
 const DEFAULT_REDIRECT = '/admin-panel';
 
@@ -50,7 +50,11 @@ export class LoginComponent {
           void this.router.navigateByUrl(this.redirectUrl());
         },
         error: (error: unknown) => {
-          this.errorMessage.set(apiErrorMessage(error));
+          const apiError = toApiError(error);
+          // 401 here means wrong credentials, not an expired session.
+          this.errorMessage.set(
+            apiError.status === 401 ? 'نام کاربری یا رمز عبور اشتباه است' : apiError.message,
+          );
           this.isSubmitting.set(false);
         },
       });
