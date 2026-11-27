@@ -15,6 +15,13 @@ export interface ApiError {
 
 const NETWORK_ERROR_MESSAGE = 'خطا در برقراری ارتباط با سرور';
 const UNKNOWN_ERROR_MESSAGE = 'خطای غیرمنتظره‌ای رخ داد. لطفاً دوباره تلاش کنید.';
+/**
+ * A 200 response that Angular could not read as JSON almost always means the
+ * request reached the SPA fallback (`index.html`) instead of the API, e.g. a
+ * wrong route. Saying "parsing failed" would hide that from the operator.
+ */
+const INVALID_PAYLOAD_MESSAGE = 'پاسخ سرور JSON معتبر نیست؛ احتمالاً آدرس API اشتباه است یا سرویس در دسترس نیست';
+const HTML_RESPONSE_MESSAGE = 'سرور به‌جای داده، صفحه HTML برگرداند؛ آدرس API یا تنظیمات میزبانی را بررسی کنید';
 
 const STATUS_MESSAGES: Record<number, string> = {
   0: NETWORK_ERROR_MESSAGE,
@@ -53,6 +60,19 @@ function readServerMessage(body: unknown): string | null {
 /** Maps anything thrown by `HttpClient` onto a stable `ApiError`. */
 export function toApiError(error: unknown): ApiError {
   if (error instanceof HttpErrorResponse) {
+    // Angular reports a JSON parse failure on an HTTP 200 as an error whose
+    // `error` payload is the raw (usually HTML) body.
+    if (error.status === 200) {
+      const body = typeof error.error === 'string' ? error.error : '';
+      const looksLikeHtml = /<\s*(!doctype|html|head|body)\b/i.test(body);
+
+      return {
+        status: 200,
+        message: looksLikeHtml ? HTML_RESPONSE_MESSAGE : INVALID_PAYLOAD_MESSAGE,
+        details: error.error,
+      };
+    }
+
     return {
       status: error.status,
       message:

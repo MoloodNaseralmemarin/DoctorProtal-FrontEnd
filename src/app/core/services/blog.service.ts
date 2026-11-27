@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, map, throwError } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 import { Blog } from '../models/blog.model';
@@ -9,7 +9,11 @@ import { toPagedResult } from '../http/paged-result';
 
 /**
  * Blog access is split by audience: the public site reads `/api/Blog`, while
- * the admin panel reads `/api/admin/BlogAdmin`. Both return a paged envelope.
+ * the admin panel reads `/api/BlogAdmin`. Both return a paged envelope.
+ *
+ * The admin controller lives directly under `api/` (its `[Route]` attribute is
+ * `api/[controller]`), so a `/admin/` prefix produces the SPA's index.html
+ * with HTTP 200 and Angular reports a JSON parsing error.
  */
 @Injectable({
   providedIn: 'root',
@@ -17,7 +21,7 @@ import { toPagedResult } from '../http/paged-result';
 export class BlogService {
   private readonly http = inject(HttpClient);
   private readonly publicUrl = `${environment.apiUrl}/Blog`;
-  private readonly adminUrl = `${environment.apiUrl}/admin/BlogAdmin`;
+  private readonly adminUrl = `${environment.apiUrl}/BlogAdmin`;
 
   /** Public list of published articles. The API defaults to a page size of 3. */
   getPublicAll(pageNumber = 1, pageSize = 3): Observable<PagedResult<Blog>> {
@@ -30,33 +34,34 @@ export class BlogService {
 
   /** Admin list, including drafts; requires the bearer token. */
   getAdminAll(pageNumber = 1, pageSize = 10): Observable<PagedResult<Blog>> {
-    return this.getPaged(this.adminUrl, pageNumber, pageSize);
+    return this.getPaged(`${this.adminUrl}/Index`, pageNumber, pageSize);
   }
 
+  /** Full record, including `bodyText`; the list endpoint omits it. */
   getAdminById(id: number): Observable<Blog> {
     return this.http.get<Blog>(`${this.adminUrl}/${id}`);
   }
 
-  /** Active articles as a plain array (no paging on this endpoint). */
-  getActive(): Observable<Blog[]> {
-    return this.http.get<Blog[]>(`${this.adminUrl}/active`);
+  create(model: Partial<Blog>): Observable<Blog> {
+    return this.http.post<Blog>(`${this.adminUrl}/Create`, this.toPayload(model));
   }
 
-  create(model: Partial<Blog>): Observable<unknown> {
-    return this.http.post(`${this.adminUrl}/Create`, model);
+  update(id: number, model: Partial<Blog>): Observable<Blog> {
+    return this.http.put<Blog>(`${this.adminUrl}/Update/${id}`, this.toPayload(model));
   }
 
-  /**
-   * The backend keeps no update route for articles (the deployed API answers
-   * 405), so this fails locally with a clear message instead of a broken call.
-   */
-  update(_id: number, _model: Partial<Blog>): Observable<never> {
-    return throwError(() => new Error('ویرایش مقاله در سرویس فعلی پشتیبانی نمی‌شود'));
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.adminUrl}/Delete/${id}`);
   }
 
-  /** No delete route exists either; see {@link update}. */
-  delete(_id: number): Observable<never> {
-    return throwError(() => new Error('حذف مقاله در سرویس فعلی پشتیبانی نمی‌شود'));
+  /** Only the writable fields are sent; ids and audit dates are server-owned. */
+  private toPayload(model: Partial<Blog>): Partial<Blog> {
+    return {
+      title: model.title?.trim() ?? '',
+      description: model.description?.trim() ?? '',
+      bodyText: model.bodyText ?? '',
+      isActive: model.isActive ?? true,
+    };
   }
 
   private getPaged(

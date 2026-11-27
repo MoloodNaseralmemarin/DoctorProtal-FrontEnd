@@ -80,6 +80,12 @@ export const routes: Routes = [
             (m) => m.AdminDoctorProfileComponent,
           ),
       },
+      {
+        path: 'services',
+        title: 'مدیریت خدمات',
+        loadComponent: () =>
+          import('./features/admin/service-admin/service-admin').then((m) => m.AdminServiceComponent),
+      },
       // Legacy paths kept so existing bookmarks and links keep working.
       { path: 'admin-blog', redirectTo: 'blog', pathMatch: 'full' },
       { path: 'banner-upload', redirectTo: 'banner', pathMatch: 'full' },

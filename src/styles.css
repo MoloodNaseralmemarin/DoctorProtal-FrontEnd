@@ -114,6 +114,9 @@ html {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.95em;
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .rich-text-content th,
@@ -131,6 +134,12 @@ html {
 
 .rich-text-content figure {
   margin: 1.25em 0;
+}
+
+.rich-text-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
 }
 
 .rich-text-content img {

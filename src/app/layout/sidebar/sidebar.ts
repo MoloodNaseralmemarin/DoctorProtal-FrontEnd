@@ -29,6 +29,7 @@ export class Sidebar {
   protected readonly menuItems: readonly SidebarLink[] = [
     { path: '/admin-panel', label: 'پیشخوان', icon: 'fas fa-th-large' },
     { path: '/admin-panel/banner', label: 'مدیریت بنرها', icon: 'fas fa-images' },
+    { path: '/admin-panel/services', label: 'خدمات مطب', icon: 'fas fa-stethoscope' },
     { path: '/admin-panel/doctor-profile', label: 'پروفایل پزشک', icon: 'fas fa-user-md' },
     { path: '/admin-panel/eye-care-tips', label: 'نکات مراقبتی', icon: 'fas fa-eye' },
     { path: '/admin-panel/blog', label: 'وبلاگ', icon: 'fas fa-newspaper' },

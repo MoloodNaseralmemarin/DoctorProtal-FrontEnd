@@ -20,6 +20,7 @@ export class AdminDashboardComponent {
   protected readonly quickActions: readonly QuickAction[] = [
     { path: '/admin-panel/blog', label: 'ارسال بلاگ جدید', icon: 'fas fa-newspaper' },
     { path: '/admin-panel/eye-care-tips', label: 'افزودن نکته مراقبتی', icon: 'fas fa-eye' },
+    { path: '/admin-panel/services', label: 'مدیریت خدمات', icon: 'fas fa-stethoscope' },
     { path: '/admin-panel/banner', label: 'تغییر بنر سایت', icon: 'fas fa-images' },
     { path: '/admin-panel/doctor-profile', label: 'ویرایش پروفایل پزشک', icon: 'fas fa-user-md' },
   ];

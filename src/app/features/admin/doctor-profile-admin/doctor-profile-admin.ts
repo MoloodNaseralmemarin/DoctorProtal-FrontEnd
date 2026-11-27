@@ -33,7 +33,12 @@ export class AdminDoctorProfileComponent implements OnInit {
     this.service.getDoctorProfile().subscribe({
       next: (profile) => {
         if (profile) {
-          this.doctor = profile;
+          this.doctor = {
+            ...profile,
+            specialty: profile.specialty ?? '',
+            education: profile.education ?? '',
+            services: profile.services ?? '',
+          };
         }
       },
       error: (error: unknown) => this.toast.error(apiErrorMessage(error)),
@@ -52,6 +57,14 @@ export class AdminDoctorProfileComponent implements OnInit {
       next: () => {
         this.toast.success('اطلاعات پروفایل با موفقیت بروزرسانی شد');
         this.isSubmitting.set(false);
+        // Keep the form on the server-normalised values.
+        this.service.getDoctorProfile().subscribe({
+          next: (profile) => {
+            if (profile) {
+              this.doctor = profile;
+            }
+          },
+        });
       },
       error: (error: unknown) => {
         this.toast.error(apiErrorMessage(error));

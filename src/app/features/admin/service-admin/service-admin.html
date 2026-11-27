@@ -1,0 +1,183 @@
+<div class="max-w-6xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 pb-12">
+
+  <!-- Header Section -->
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+    <div>
+      <div class="flex items-center gap-4 mb-3">
+        <div class="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center shadow-inner">
+          <i class="fas fa-stethoscope text-emerald-600 text-xl" aria-hidden="true"></i>
+        </div>
+        <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">خدمات مطب</h2>
+      </div>
+      <p class="text-slate-500 font-medium italic mr-16">
+        خدمات قابل ارائه در صفحه اصلی را مدیریت کنید
+      </p>
+    </div>
+
+    <button
+      type="button"
+      (click)="startCreate()"
+      *ngIf="!showForm()"
+      class="bg-emerald-600 text-white px-6 py-3.5 rounded-2xl text-sm font-bold shadow-lg shadow-emerald-600/20 hover:bg-emerald-700 transition-all active:scale-95 flex items-center gap-2">
+      <i class="fas fa-plus" aria-hidden="true"></i>
+      افزودن خدمت جدید
+    </button>
+  </div>
+
+  <!-- Form Section (Create/Edit) -->
+  <div *ngIf="showForm()" class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden mb-10 animate-in zoom-in-95 duration-300">
+    <div class="p-8 sm:p-10">
+      <div class="flex items-center justify-between mb-8">
+        <h3 class="text-xl font-black text-slate-800">
+          {{ editingId() ? 'ویرایش خدمت' : 'ثبت خدمت جدید' }}
+        </h3>
+        <button
+          type="button"
+          (click)="reset()"
+          aria-label="بستن فرم خدمت"
+          class="text-slate-400 hover:text-slate-600 transition-colors rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500">
+          <i class="fas fa-times text-xl" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <form (ngSubmit)="save()" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-2">
+            <label for="service-title" class="text-sm font-bold text-slate-700 mr-2">عنوان خدمت</label>
+            <input
+              id="service-title"
+              type="text"
+              [(ngModel)]="model.title"
+              name="title"
+              maxlength="200"
+              class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-700 font-bold focus:bg-white focus:border-emerald-400 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all"
+              placeholder="مثلا: جراحی آب مروارید"
+            />
+          </div>
+          <div class="space-y-2">
+            <span class="text-sm font-bold text-slate-700 mr-2">وضعیت نمایش</span>
+            <div class="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" [(ngModel)]="model.isActive" name="isActive" class="sr-only peer" />
+                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:-translate-x-full rtl:peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                <span class="mr-3 text-sm font-bold text-slate-600">{{ model.isActive ? 'فعال' : 'غیرفعال' }}</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm font-bold text-slate-700 mr-2">توضیحات خدمت</label>
+          <app-rich-text-editor
+            [(ngModel)]="model.description"
+            name="description"
+            minHeight="12rem"
+            placeholder="توضیح خدمت، شرایط و نکات مهم را وارد کنید..."
+          ></app-rich-text-editor>
+        </div>
+
+        <div class="pt-6 border-t border-slate-50 flex items-center justify-end gap-4">
+          <button
+            type="button"
+            (click)="reset()"
+            class="px-8 py-4 rounded-2xl text-sm font-bold text-slate-500 hover:bg-slate-50 transition-all active:scale-95">
+            انصراف
+          </button>
+          <button
+            type="submit"
+            [disabled]="isSubmitting()"
+            class="px-12 py-4 bg-emerald-900 text-white rounded-2xl font-bold shadow-xl shadow-emerald-900/20 hover:bg-emerald-800 transition-all active:scale-95 disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none disabled:cursor-not-allowed">
+            <span class="flex items-center gap-3">
+              <i class="fas" [class.fa-save]="!isSubmitting()" [class.fa-circle-notch]="isSubmitting()" [class.fa-spin]="isSubmitting()" aria-hidden="true"></i>
+              {{ isSubmitting() ? 'در حال ذخیره...' : editingId() ? 'ذخیره تغییرات' : 'ثبت خدمت' }}
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- List Section -->
+  <div *ngIf="!showForm()" class="space-y-6">
+
+    <div class="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm">
+      <div class="relative w-full">
+        <i class="fas fa-search absolute right-5 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true"></i>
+        <input
+          type="search"
+          [ngModel]="searchTerm()"
+          (ngModelChange)="searchTerm.set($event)"
+          placeholder="جستجو در بین خدمات..."
+          aria-label="جستجو در بین خدمات"
+          class="w-full bg-slate-50 border-none rounded-2xl pr-12 py-3.5 text-sm font-medium focus:ring-2 focus:ring-emerald-500/10 transition-all outline-none"
+        />
+      </div>
+    </div>
+
+    <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-right border-collapse" [attr.aria-busy]="isLoading()">
+          <thead>
+            <tr class="bg-slate-50/50">
+              <th class="px-8 py-5 text-xs font-black text-slate-400 uppercase tracking-widest">عنوان خدمت</th>
+              <th class="px-8 py-5 text-xs font-black text-slate-400 uppercase tracking-widest">توضیحات</th>
+              <th class="px-8 py-5 text-xs font-black text-slate-400 uppercase tracking-widest">وضعیت</th>
+              <th class="px-8 py-5 text-xs font-black text-slate-400 uppercase tracking-widest text-center">عملیات</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-50">
+            <tr *ngIf="isLoading()">
+              <td colspan="4" class="px-8 py-16 text-center text-slate-400">
+                <i class="fas fa-circle-notch fa-spin text-xl mb-3 block" aria-hidden="true"></i>
+                <span class="text-xs font-bold">در حال دریافت خدمات...</span>
+              </td>
+            </tr>
+            <tr *ngFor="let service of filteredServices()" class="hover:bg-slate-50/50 transition-colors group">
+              <td class="px-8 py-6">
+                <span class="text-sm font-bold text-slate-800 group-hover:text-emerald-700 transition-colors">{{ service.title }}</span>
+              </td>
+              <td class="px-8 py-6 max-w-xs">
+                <span class="text-xs text-slate-500 leading-6 block">{{ preview(service.description) }}</span>
+              </td>
+              <td class="px-8 py-6">
+                <span [class]="service.isActive !== false ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-100 text-slate-500'"
+                      class="text-[10px] font-bold px-3 py-1.5 rounded-full">
+                  {{ service.isActive !== false ? 'فعال' : 'غیرفعال' }}
+                </span>
+              </td>
+              <td class="px-8 py-6">
+                <div class="flex items-center justify-center gap-2">
+                  <button
+                    type="button"
+                    (click)="edit(service)"
+                    [attr.aria-label]="'ویرایش خدمت ' + service.title"
+                    class="w-9 h-9 rounded-xl bg-slate-50 text-slate-500 hover:bg-emerald-50 hover:text-emerald-700 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500">
+                    <i class="fas fa-edit text-sm" aria-hidden="true"></i>
+                  </button>
+                  <button
+                    type="button"
+                    (click)="remove(service)"
+                    [disabled]="deletingId() === service.id"
+                    [attr.aria-label]="'حذف خدمت ' + service.title"
+                    class="w-9 h-9 rounded-xl bg-slate-50 text-slate-500 hover:bg-red-50 hover:text-red-600 disabled:opacity-40 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400">
+                    <i class="fas" [class.fa-trash-alt]="deletingId() !== service.id" [class.fa-circle-notch]="deletingId() === service.id" [class.fa-spin]="deletingId() === service.id" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="!isLoading() && filteredServices().length === 0">
+              <td colspan="4" class="px-8 py-20 text-center">
+                <div class="flex flex-col items-center gap-4">
+                  <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-slate-200">
+                    <i class="fas fa-stethoscope text-3xl" aria-hidden="true"></i>
+                  </div>
+                  <p class="text-slate-400 font-bold text-sm">خدمتی برای نمایش یافت نشد</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

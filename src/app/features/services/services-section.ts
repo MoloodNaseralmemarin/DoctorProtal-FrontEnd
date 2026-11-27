@@ -12,6 +12,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ServiceDto } from '../../core/models/service.model';
 import { ServiceCatalogService } from '../../core/services/service-catalog.service';
 import { lockBodyScroll, unlockBodyScroll } from '../../core/ui/body-scroll-lock';
+import { RichTextPipe } from '../../shared/pipes/rich-text.pipe';
 
 type ServicesState = 'loading' | 'ready' | 'empty' | 'error';
 
@@ -19,7 +20,7 @@ type ServicesState = 'loading' | 'ready' | 'empty' | 'error';
 @Component({
   selector: 'app-services-section',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule],
+  imports: [CommonModule, RichTextPipe],
   templateUrl: './services-section.html',
 })
 export class ServicesSectionComponent {

@@ -23,9 +23,8 @@ const EMPTY_MODEL: Partial<Blog> = {
 };
 
 /**
- * Create blog articles. The list is fetched in one page and searched locally
- * because the API exposes no title filter. Editing and deleting are not
- * supported by the backend (there are no PUT/DELETE routes).
+ * Create, edit and delete blog articles. The list is fetched in one page and
+ * searched/paginated locally because the API exposes no title filter.
  */
 @Component({
   selector: 'app-admin-blog',
@@ -39,11 +38,15 @@ export class AdminBlogComponent implements OnInit {
   private readonly toast = inject(ToastService);
 
   protected readonly blogs = signal<readonly Blog[]>([]);
+  protected readonly isLoading = signal(true);
   protected readonly isSubmitting = signal(false);
+  protected readonly isEditLoading = signal(false);
+  protected readonly deletingId = signal<number | null>(null);
   protected readonly searchTerm = signal('');
   protected readonly currentPage = signal(1);
   protected readonly pageSize = signal(5);
   protected readonly showForm = signal(false);
+  protected readonly editingId = signal<number | null>(null);
 
   /** Template-driven form model; replaced as a whole after a successful save. */
   protected model: Partial<Blog> = { ...EMPTY_MODEL };
@@ -82,9 +85,22 @@ export class AdminBlogComponent implements OnInit {
 
   protected load(): void {
     // The admin screen paginates locally, so fetch a large enough page.
+    this.isLoading.set(true);
+
     this.blogService.getAdminAll(1, 100).subscribe({
-      next: (result) => this.blogs.set(result.items),
-      error: (error: unknown) => this.toast.error(apiErrorMessage(error)),
+      next: (result) => {
+        this.blogs.set(result.items);
+        this.isLoading.set(false);
+
+        // A delete can empty the page the operator was looking at.
+        this.currentPage.update((page) =>
+          Math.min(Math.max(1, page), Math.max(1, Math.ceil(this.filteredBlogs().length / this.pageSize()))),
+        );
+      },
+      error: (error: unknown) => {
+        this.isLoading.set(false);
+        this.toast.error(apiErrorMessage(error));
+      },
     });
   }
 
@@ -93,26 +109,63 @@ export class AdminBlogComponent implements OnInit {
   }
 
   protected startCreate(): void {
+    this.editingId.set(null);
     this.model = { ...EMPTY_MODEL };
     this.showForm.set(true);
   }
 
-  /** No update endpoint exists; explain instead of opening a form that fails. */
-  protected edit(_blog: Blog): void {
-    this.toast.error('ویرایش مقاله در سرویس فعلی پشتیبانی نمی‌شود');
+  /** Loads the full record first: the list endpoint omits `bodyText`. */
+  protected edit(blog: Blog): void {
+    if (this.isEditLoading()) {
+      return;
+    }
+
+    if (blog.id === undefined) {
+      this.toast.error('شناسه مقاله یافت نشد');
+      return;
+    }
+
+    this.isEditLoading.set(true);
+
+    this.blogService.getAdminById(blog.id).subscribe({
+      next: (full) => {
+        this.editingId.set(full.id ?? blog.id!);
+        this.model = {
+          title: full.title ?? blog.title,
+          description: full.description ?? blog.description,
+          bodyText: full.bodyText ?? '',
+          isActive: full.isActive ?? true,
+        };
+        this.showForm.set(true);
+        this.isEditLoading.set(false);
+      },
+      error: (error: unknown) => {
+        this.isEditLoading.set(false);
+        this.toast.error(apiErrorMessage(error));
+      },
+    });
   }
 
   protected save(): void {
+    if (this.isSubmitting()) {
+      return;
+    }
+
     if (!this.model.title?.trim() || !this.model.description?.trim() || !this.model.bodyText?.trim()) {
-      this.toast.error('لطفا تمام فیلدها را پر کنید');
+      this.toast.error('لطفا عنوان، خلاصه و متن مقاله را پر کنید');
       return;
     }
 
     this.isSubmitting.set(true);
 
-    this.blogService.create(this.model).subscribe({
+    const id = this.editingId();
+    const request$ = id
+      ? this.blogService.update(id, this.model)
+      : this.blogService.create(this.model);
+
+    request$.subscribe({
       next: () => {
-        this.toast.success('بلاگ جدید ثبت شد');
+        this.toast.success(id ? 'مقاله با موفقیت ویرایش شد' : 'بلاگ جدید ثبت شد');
         this.reset();
         this.load();
         this.isSubmitting.set(false);
@@ -124,12 +177,37 @@ export class AdminBlogComponent implements OnInit {
     });
   }
 
-  /** No delete endpoint exists; explain instead of issuing a 405 request. */
-  protected remove(_id?: number): void {
-    this.toast.error('حذف مقاله در سرویس فعلی پشتیبانی نمی‌شود');
+  protected remove(blog: Blog): void {
+    if (this.deletingId() !== null) {
+      return;
+    }
+
+    if (!confirm(`آیا از حذف مقاله «${blog.title}» اطمینان دارید؟`)) {
+      return;
+    }
+
+    if (blog.id === undefined) {
+      this.toast.error('شناسه مقاله یافت نشد');
+      return;
+    }
+
+    this.deletingId.set(blog.id);
+
+    this.blogService.delete(blog.id).subscribe({
+      next: () => {
+        this.toast.success('مقاله با موفقیت حذف شد');
+        this.deletingId.set(null);
+        this.load();
+      },
+      error: (error: unknown) => {
+        this.deletingId.set(null);
+        this.toast.error(apiErrorMessage(error));
+      },
+    });
   }
 
   protected reset(): void {
+    this.editingId.set(null);
     this.showForm.set(false);
     this.model = { ...EMPTY_MODEL };
   }

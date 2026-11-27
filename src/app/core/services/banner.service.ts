@@ -18,13 +18,13 @@ export class BannerService {
   private readonly http = inject(HttpClient);
 
   private readonly siteBannerUrl = `${environment.apiUrl}/SiteBanner/site-banner`;
-  private readonly uploadUrl = `${environment.apiUrl}/admin/SiteBannerAdmin/banner-upload`;
+  private readonly uploadUrl = `${environment.apiUrl}/SiteBannerAdmin/banner-upload`;
 
   getBanner(): Observable<SiteBannerDto> {
     return this.http.get<SiteBannerDto>(this.siteBannerUrl);
   }
 
-  /** `PUT /api/admin/SiteBannerAdmin/banner-upload` (multipart: Id + Image). */
+  /** `PUT /api/SiteBannerAdmin/banner-upload` (multipart: Id + Image). */
   updateBanner(file: File, id: number = BannerService.DEFAULT_BANNER_ID): Observable<void> {
     const formData = new FormData();
 

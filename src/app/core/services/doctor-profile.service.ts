@@ -11,14 +11,14 @@ import { DoctorProfile } from '../models/doctor-profile.model';
 export class DoctorProfileService {
   private readonly http = inject(HttpClient);
   private readonly profileUrl = `${environment.apiUrl}/DoctorProfile`;
-  private readonly adminProfileUrl = `${environment.apiUrl}/admin/DoctorProfileAdmin`;
+  private readonly adminProfileUrl = `${environment.apiUrl}/DoctorProfileAdmin`;
 
   getDoctorProfile(): Observable<DoctorProfile> {
     return this.http.get<DoctorProfile>(`${this.profileUrl}/profile`);
   }
 
   /** Writes go through the admin controller, not the public one. */
-  update(model: DoctorProfile): Observable<void> {
-    return this.http.put<void>(`${this.adminProfileUrl}/edit`, model);
+  update(model: DoctorProfile): Observable<DoctorProfile> {
+    return this.http.put<DoctorProfile>(`${this.adminProfileUrl}/Update`, model);
   }
 }

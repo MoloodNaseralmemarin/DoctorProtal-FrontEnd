@@ -26,8 +26,13 @@
     <div class="p-8 sm:p-10">
       <div class="flex items-center justify-between mb-8">
         <h3 class="text-xl font-black text-slate-800">{{ editingId() ? 'ویرایش نکته' : 'افزودن نکته جدید' }}</h3>
-        <button (click)="reset()" class="text-slate-400 hover:text-slate-600 transition-colors">
-          <i class="fas fa-times text-xl"></i>
+        <button
+          type="button"
+          (click)="reset()"
+          aria-label="بستن فرم نکته"
+          class="text-slate-400 hover:text-slate-600 transition-colors rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+        >
+          <i class="fas fa-times text-xl" aria-hidden="true"></i>
         </button>
       </div>
 
@@ -53,6 +58,21 @@
               </label>
             </div>
           </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-sm font-bold text-slate-700 mr-2">خلاصه کوتاه (اختیاری)</label>
+          <textarea
+            [(ngModel)]="model.description"
+            name="description"
+            rows="2"
+            maxlength="700"
+            class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-700 font-medium leading-relaxed focus:bg-white focus:border-emerald-400 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all resize-none"
+            placeholder="اگر خالی بماند، از متن نکته ساخته می‌شود..."
+          ></textarea>
+          <p class="text-[11px] text-slate-400 mr-2">
+            این متن در کارت‌های صفحه اصلی نمایش داده می‌شود.
+          </p>
         </div>
 
         <div class="space-y-2">
@@ -119,7 +139,7 @@
     <!-- Tips Table/List -->
     <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
       <div class="overflow-x-auto">
-        <table class="w-full text-right border-collapse">
+        <table class="w-full text-right border-collapse" [attr.aria-busy]="isLoading()">
           <thead>
             <tr class="bg-slate-50/50">
               <th class="px-8 py-5 text-xs font-black text-slate-400 uppercase tracking-widest">عنوان نکته</th>
@@ -128,6 +148,12 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-50">
+            <tr *ngIf="isLoading()">
+              <td colspan="3" class="px-8 py-16 text-center text-slate-400">
+                <i class="fas fa-circle-notch fa-spin text-xl mb-3 block" aria-hidden="true"></i>
+                <span class="text-xs font-bold">در حال دریافت نکات...</span>
+              </td>
+            </tr>
             <tr *ngFor="let tip of paginatedTips()" class="hover:bg-slate-50/50 transition-colors group">
               <td class="px-8 py-6">
                 <span class="text-sm font-bold text-slate-800 group-hover:text-emerald-700 transition-colors">{{ tip.title }}</span>
@@ -140,16 +166,27 @@
               </td>
               <td class="px-8 py-6">
                 <div class="flex items-center justify-center gap-2">
-                  <button (click)="edit(tip)" class="w-9 h-9 rounded-xl bg-slate-50 text-slate-400 hover:bg-emerald-50 hover:text-emerald-600 transition-all">
-                    <i class="fas fa-edit text-sm"></i>
+                  <button
+                    type="button"
+                    (click)="edit(tip)"
+                    [attr.aria-label]="'ویرایش نکته ' + tip.title"
+                    class="w-9 h-9 rounded-xl bg-slate-50 text-slate-500 hover:bg-emerald-50 hover:text-emerald-700 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+                  >
+                    <i class="fas fa-edit text-sm" aria-hidden="true"></i>
                   </button>
-                  <button (click)="remove(tip.id)" class="w-9 h-9 rounded-xl bg-slate-50 text-slate-400 hover:bg-red-50 hover:text-red-500 transition-all">
-                    <i class="fas fa-trash-alt text-sm"></i>
+                  <button
+                    type="button"
+                    (click)="remove(tip)"
+                    [disabled]="deletingId() === tip.id"
+                    [attr.aria-label]="'حذف نکته ' + tip.title"
+                    class="w-9 h-9 rounded-xl bg-slate-50 text-slate-500 hover:bg-red-50 hover:text-red-600 disabled:opacity-40 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
+                  >
+                    <i class="fas" [class.fa-trash-alt]="deletingId() !== tip.id" [class.fa-circle-notch]="deletingId() === tip.id" [class.fa-spin]="deletingId() === tip.id" aria-hidden="true"></i>
                   </button>
                 </div>
               </td>
             </tr>
-            <tr *ngIf="paginatedTips().length === 0">
+            <tr *ngIf="!isLoading() && paginatedTips().length === 0">
               <td colspan="3" class="px-8 py-20 text-center">
                 <div class="flex flex-col items-center gap-4">
                   <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-slate-200">

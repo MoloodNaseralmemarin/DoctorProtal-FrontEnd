@@ -9,8 +9,9 @@ import { toPagedResult } from '../http/paged-result';
 
 /**
  * The public site reads `/api/EyeCareTips`; CRUD lives under the separate
- * `/api/admin/EyeCareTipsAdmin` controller (the `/api/admin/EyeCareTips`
- * variant exposed by the admin spec currently answers 401/403).
+ * `/api/EyeCareTipAdmin` controller. Its route is `api/[controller]`, so the
+ * segment is `EyeCareTipAdmin` — neither `/admin/` nor `EyeCareTipsAdmin`
+ * matches and both fall through to the SPA's `index.html`.
  */
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,7 @@ import { toPagedResult } from '../http/paged-result';
 export class EyeCareTipService {
   private readonly http = inject(HttpClient);
   private readonly publicUrl = `${environment.apiUrl}/EyeCareTips`;
-  private readonly adminUrl = `${environment.apiUrl}/admin/EyeCareTipsAdmin`;
+  private readonly adminUrl = `${environment.apiUrl}/EyeCareTipAdmin`;
 
   /** Public paged list; the API defaults to a page size of 3. */
   getPublicAll(pageNumber = 1, pageSize = 3): Observable<PagedResult<EyeCareTip>> {
@@ -39,15 +40,25 @@ export class EyeCareTipService {
   }
 
   create(model: Partial<EyeCareTip>): Observable<unknown> {
-    return this.http.post(this.adminUrl, model);
+    return this.http.post(this.adminUrl, this.toPayload(model));
   }
 
   update(id: number, model: Partial<EyeCareTip>): Observable<void> {
-    return this.http.put<void>(`${this.adminUrl}/${id}`, model);
+    return this.http.put<void>(`${this.adminUrl}/${id}`, this.toPayload(model));
   }
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.adminUrl}/${id}`);
+  }
+
+  /** Only the writable fields are sent; ids and audit dates are server-owned. */
+  private toPayload(model: Partial<EyeCareTip>): Partial<EyeCareTip> {
+    return {
+      title: model.title?.trim() ?? '',
+      description: model.description?.trim() ?? '',
+      bodyText: model.bodyText ?? '',
+      isActive: model.isActive ?? true,
+    };
   }
 
   private getPaged(

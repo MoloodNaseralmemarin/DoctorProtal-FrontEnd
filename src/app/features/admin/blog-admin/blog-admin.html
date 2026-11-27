@@ -25,9 +25,16 @@
   <div *ngIf="showForm()" class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden mb-10 animate-in zoom-in-95 duration-300">
     <div class="p-8 sm:p-10">
       <div class="flex items-center justify-between mb-8">
-        <h3 class="text-xl font-black text-slate-800">ثبت مقاله جدید</h3>
-        <button (click)="reset()" class="text-slate-400 hover:text-slate-600 transition-colors">
-          <i class="fas fa-times text-xl"></i>
+        <h3 class="text-xl font-black text-slate-800">
+          {{ editingId() ? 'ویرایش مقاله' : 'ثبت مقاله جدید' }}
+        </h3>
+        <button
+          type="button"
+          (click)="reset()"
+          aria-label="بستن فرم مقاله"
+          class="text-slate-400 hover:text-slate-600 transition-colors rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+        >
+          <i class="fas fa-times text-xl" aria-hidden="true"></i>
         </button>
       </div>
 
@@ -90,7 +97,7 @@
           >
             <div class="relative z-10 flex items-center gap-3">
               <i class="fas" [class.fa-save]="!isSubmitting()" [class.fa-circle-notch]="isSubmitting()" [class.animate-spin]="isSubmitting()"></i>
-              <span>انتشار مقاله</span>
+              <span>{{ isSubmitting() ? 'در حال ذخیره...' : editingId() ? 'ذخیره تغییرات' : 'انتشار مقاله' }}</span>
             </div>
           </button>
         </div>
@@ -129,7 +136,7 @@
     <!-- Articles Table/List -->
     <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
       <div class="overflow-x-auto">
-        <table class="w-full text-right border-collapse">
+        <table class="w-full text-right border-collapse" [attr.aria-busy]="isLoading()">
           <thead>
             <tr class="bg-slate-50/50">
               <th class="px-8 py-5 text-xs font-black text-slate-400 uppercase tracking-widest">عنوان مقاله</th>
@@ -138,6 +145,12 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-50">
+            <tr *ngIf="isLoading()">
+              <td colspan="3" class="px-8 py-16 text-center text-slate-400">
+                <i class="fas fa-circle-notch fa-spin text-xl mb-3 block" aria-hidden="true"></i>
+                <span class="text-xs font-bold">در حال دریافت مقالات...</span>
+              </td>
+            </tr>
             <tr *ngFor="let blog of paginatedBlogs()" class="hover:bg-slate-50/50 transition-colors group">
               <td class="px-8 py-6">
                 <span class="text-sm font-bold text-slate-800 group-hover:text-emerald-700 transition-colors">{{ blog.title }}</span>
@@ -150,16 +163,28 @@
               </td>
               <td class="px-8 py-6">
                 <div class="flex items-center justify-center gap-2">
-                  <button (click)="edit(blog)" class="w-9 h-9 rounded-xl bg-slate-50 text-slate-400 hover:bg-emerald-50 hover:text-emerald-600 transition-all">
-                    <i class="fas fa-edit text-sm"></i>
+                  <button
+                    type="button"
+                    (click)="edit(blog)"
+                    [disabled]="isEditLoading()"
+                    [attr.aria-label]="'ویرایش مقاله ' + blog.title"
+                    class="w-9 h-9 rounded-xl bg-slate-50 text-slate-500 hover:bg-emerald-50 hover:text-emerald-700 disabled:opacity-40 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+                  >
+                    <i class="fas" [class.fa-edit]="!isEditLoading()" [class.fa-circle-notch]="isEditLoading()" [class.fa-spin]="isEditLoading()" aria-hidden="true"></i>
                   </button>
-                  <button (click)="remove(blog.id)" class="w-9 h-9 rounded-xl bg-slate-50 text-slate-400 hover:bg-red-50 hover:text-red-500 transition-all">
-                    <i class="fas fa-trash-alt text-sm"></i>
+                  <button
+                    type="button"
+                    (click)="remove(blog)"
+                    [disabled]="deletingId() === blog.id"
+                    [attr.aria-label]="'حذف مقاله ' + blog.title"
+                    class="w-9 h-9 rounded-xl bg-slate-50 text-slate-500 hover:bg-red-50 hover:text-red-600 disabled:opacity-40 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
+                  >
+                    <i class="fas" [class.fa-trash-alt]="deletingId() !== blog.id" [class.fa-circle-notch]="deletingId() === blog.id" [class.fa-spin]="deletingId() === blog.id" aria-hidden="true"></i>
                   </button>
                 </div>
               </td>
             </tr>
-            <tr *ngIf="paginatedBlogs().length === 0">
+            <tr *ngIf="!isLoading() && paginatedBlogs().length === 0">
               <td colspan="3" class="px-8 py-20 text-center">
                 <div class="flex flex-col items-center gap-4">
                   <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-slate-200">

@@ -3,10 +3,18 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, map, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
-/** Shape documented by `POST /api/Auth` in Swagger. */
+/** `POST /api/login` request contract. */
 interface LoginRequest {
   userName: string;
   password: string;
+}
+
+/** `LoginResponseDto` returned by `POST /api/login`. */
+interface LoginResponse {
+  token: string;
+  expiresAtUtc?: string;
+  fullName?: string;
+  role?: string;
 }
 
 interface JwtPayload {
@@ -18,18 +26,24 @@ interface JwtPayload {
 })
 export class AuthService {
   private readonly http = inject(HttpClient);
-  private readonly loginUrl = `${environment.apiUrl}/Auth`;
+  private readonly loginUrl = `${environment.apiUrl}/login`;
   private readonly tokenKey = 'token';
 
   login(userName: string, password: string): Observable<string> {
     const body: LoginRequest = { userName, password };
 
-    return this.http
-      .post(this.loginUrl, body, { responseType: 'text' })
-      .pipe(
-        map((response) => this.normalizeToken(response)),
-        tap((token) => this.setToken(token)),
-      );
+    return this.http.post<LoginResponse>(this.loginUrl, body).pipe(
+      map((response) => {
+        const token = response?.token?.trim();
+
+        if (!token) {
+          throw new Error('پاسخ ورود شامل توکن نبود');
+        }
+
+        return token;
+      }),
+      tap((token) => this.setToken(token)),
+    );
   }
 
   getToken(): string | null {
@@ -66,25 +80,6 @@ export class AuthService {
     }
 
     return true;
-  }
-
-  /**
-   * ASP.NET Core serialises a plain string result as a JSON string
-   * (`"eyJ..."`), so the surrounding quotes must be removed before the value
-   * can be sent as a bearer token. Raw text tokens are returned unchanged.
-   */
-  private normalizeToken(response: string): string {
-    const value = (response ?? '').trim();
-
-    if (value.startsWith('"') && value.endsWith('"')) {
-      try {
-        return (JSON.parse(value) as string).trim();
-      } catch {
-        return value.replace(/^"|"$/g, '').trim();
-      }
-    }
-
-    return value;
   }
 
   /** Reads `exp` from the JWT payload without pulling in a decoder library. */

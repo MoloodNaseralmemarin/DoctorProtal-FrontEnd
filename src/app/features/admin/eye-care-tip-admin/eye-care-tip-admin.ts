@@ -38,7 +38,9 @@ export class AdminEyeCareTipComponent implements OnInit {
   private readonly toast = inject(ToastService);
 
   protected readonly tips = signal<readonly EyeCareTip[]>([]);
+  protected readonly isLoading = signal(true);
   protected readonly isSubmitting = signal(false);
+  protected readonly deletingId = signal<number | null>(null);
   protected readonly searchTerm = signal('');
   protected readonly currentPage = signal(1);
   protected readonly pageSize = signal(5);
@@ -81,9 +83,22 @@ export class AdminEyeCareTipComponent implements OnInit {
 
   protected load(): void {
     // The admin screen paginates locally, so fetch a large enough page.
+    this.isLoading.set(true);
+
     this.service.getAdminAll(1, 100).subscribe({
-      next: (result) => this.tips.set(result.items),
-      error: (error: unknown) => this.toast.error(apiErrorMessage(error)),
+      next: (result) => {
+        this.tips.set(result.items);
+        this.isLoading.set(false);
+
+        // A delete can empty the page the operator was looking at.
+        this.currentPage.update((page) =>
+          Math.min(Math.max(1, page), Math.max(1, Math.ceil(this.filteredTips().length / this.pageSize()))),
+        );
+      },
+      error: (error: unknown) => {
+        this.isLoading.set(false);
+        this.toast.error(apiErrorMessage(error));
+      },
     });
   }
 
@@ -106,9 +121,9 @@ export class AdminEyeCareTipComponent implements OnInit {
     }
 
     // The list cards use `description`; derive it from the body when the
-    // administrator did not provide a separate summary.
+    // administrator did not provide a separate summary (column limit: 700).
     if (!this.model.description?.trim()) {
-      this.model.description = this.toPlainText(this.model.bodyText ?? '');
+      this.model.description = this.toPlainText(this.model.bodyText ?? '').slice(0, 700);
     }
 
     this.isSubmitting.set(true);
@@ -130,17 +145,27 @@ export class AdminEyeCareTipComponent implements OnInit {
     });
   }
 
-  protected remove(id: number): void {
-    if (!confirm('آیا از حذف این مورد اطمینان دارید؟')) {
+  protected remove(tip: EyeCareTip): void {
+    if (this.deletingId() !== null) {
       return;
     }
 
-    this.service.delete(id).subscribe({
+    if (!confirm(`آیا از حذف نکته «${tip.title}» اطمینان دارید؟`)) {
+      return;
+    }
+
+    this.deletingId.set(tip.id);
+
+    this.service.delete(tip.id).subscribe({
       next: () => {
-        this.toast.success('مورد با موفقیت حذف شد');
+        this.toast.success('نکته با موفقیت حذف شد');
+        this.deletingId.set(null);
         this.load();
       },
-      error: (error: unknown) => this.toast.error(apiErrorMessage(error)),
+      error: (error: unknown) => {
+        this.deletingId.set(null);
+        this.toast.error(apiErrorMessage(error));
+      },
     });
   }
 
@@ -166,7 +191,6 @@ export class AdminEyeCareTipComponent implements OnInit {
     return html
       .replace(/<[^>]*>/g, ' ')
       .replace(/\s+/g, ' ')
-      .trim()
-      .slice(0, 300);
+      .trim();
   }
 }

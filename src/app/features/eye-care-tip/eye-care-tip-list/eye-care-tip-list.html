@@ -1,4 +1,4 @@
-<section class="py-24 bg-cream-50 relative overflow-hidden border-b border-cream-100"
+<section class="py-12 md:py-16 bg-cream-50 relative overflow-hidden border-b border-cream-100"
          dir="rtl"
          id="education">
 
@@ -9,7 +9,7 @@
   <div class="container mx-auto px-6 relative z-10">
 
     <!-- Header -->
-    <div class="max-w-2xl mb-14">
+    <div class="mb-10">
 
       <div class="flex items-center gap-3 mb-3">
         <span class="w-10 h-px bg-amber-500"></span>
@@ -19,21 +19,24 @@
         </span>
       </div>
 
-      <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mb-4">
-        نکات مراقبت از
-        <span class="text-emerald-700">
-          بینایی شما
-        </span>
-      </h2>
+      <div class="max-w-2xl">
+        <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mb-3">
+          نکات مراقبت از
+          <span class="text-emerald-700">
+            بینایی شما
+          </span>
+        </h2>
+      </div>
 
-      <p class="text-slate-600 leading-8 text-sm md:text-base">
+      <!-- Wide enough for one line on desktop; wraps naturally on smaller screens. -->
+      <p class="text-slate-600 leading-8 text-sm md:text-base max-w-full xl:whitespace-nowrap">
         توصیه‌های کاربردی و نکات بهداشتی برای حفظ سلامت چشم‌ها در زندگی روزمره، مطالعه، کار با کامپیوتر و پیشگیری از بیماری‌های شایع چشم.
       </p>
 
     </div>
 
     <!-- Tips -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
       <div
         *ngFor="let tip of tips()"

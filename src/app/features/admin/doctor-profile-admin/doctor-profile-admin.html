@@ -37,6 +37,46 @@
               </div>
             </div>
 
+            <!-- Specialty / Education / Services (short labels shown on About) -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              <div class="space-y-2">
+                <label for="doctor-specialty" class="text-sm font-bold text-slate-700 mr-2">تخصص</label>
+                <input
+                  id="doctor-specialty"
+                  type="text"
+                  [(ngModel)]="doctor.specialty"
+                  name="specialty"
+                  maxlength="200"
+                  class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-700 font-bold focus:bg-white focus:border-emerald-400 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all"
+                  placeholder="فلوشیپ بیماری شبکیه"
+                />
+              </div>
+              <div class="space-y-2">
+                <label for="doctor-education" class="text-sm font-bold text-slate-700 mr-2">تحصیلات</label>
+                <input
+                  id="doctor-education"
+                  type="text"
+                  [(ngModel)]="doctor.education"
+                  name="education"
+                  maxlength="200"
+                  class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-700 font-bold focus:bg-white focus:border-emerald-400 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all"
+                  placeholder="مدرک تخصصی چشم پزشکی"
+                />
+              </div>
+              <div class="space-y-2">
+                <label for="doctor-services" class="text-sm font-bold text-slate-700 mr-2">خدمت شاخص</label>
+                <input
+                  id="doctor-services"
+                  type="text"
+                  [(ngModel)]="doctor.services"
+                  name="services"
+                  maxlength="500"
+                  class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-700 font-bold focus:bg-white focus:border-emerald-400 focus:ring-4 focus:ring-emerald-500/5 outline-none transition-all"
+                  placeholder="عمل بلفاروپلاستی بدون بیهوشی"
+                />
+              </div>
+            </div>
+
             <!-- Clinic Info / Bio -->
             <div class="space-y-3">
               <label class="flex items-center gap-2 text-sm font-bold text-slate-700 mr-2">
