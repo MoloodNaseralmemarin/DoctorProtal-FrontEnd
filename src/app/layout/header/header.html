@@ -33,30 +33,21 @@
     </nav>
 
     <div class="mt-auto py-8 space-y-6">
-      <div class="pt-6 border-t border-cream-100">
-        <div
-          class="w-full bg-emerald-800 text-cream-50 px-6 py-4 rounded-2xl text-center shadow-lg border border-amber-500/20"
-        >
-          <span class="text-xs text-amber-300 block mb-1">جهت دریافت نوبت:</span>
+      @if (phone(); as phone) {
+        <div class="pt-6 border-t border-cream-100">
           <div
-            class="flex items-center justify-center gap-x-3 font-semibold text-[14px] tracking-tight"
+            class="w-full bg-emerald-800 text-cream-50 px-6 py-4 rounded-2xl text-center shadow-lg border border-amber-500/20"
           >
+            <span class="text-xs text-amber-300 block mb-1.5">جهت دریافت نوبت:</span>
             <a
-              [href]="'tel:' + clinicPhone.landline.dial"
+              [href]="'tel:' + phone.dial"
               dir="ltr"
-              class="whitespace-nowrap hover:text-amber-300"
-              >{{ clinicPhone.landline.label }}</a
-            >
-            <span class="opacity-30 text-xs" aria-hidden="true">|</span>
-            <a
-              [href]="'tel:' + clinicPhone.mobile.dial"
-              dir="ltr"
-              class="whitespace-nowrap hover:text-amber-300"
-              >{{ clinicPhone.mobile.label }}</a
+              class="inline-block font-semibold text-base tracking-tight whitespace-nowrap hover:text-amber-300 transition-colors rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
+              >{{ phone.label }}</a
             >
           </div>
         </div>
-      </div>
+      }
 
       <div class="flex justify-center gap-4 pb-6">
         <a
@@ -78,20 +69,22 @@
 <div class="bg-cream-100 text-slate-700 py-2 hidden md:block border-b border-cream-200/50">
   <div class="container mx-auto px-6 flex justify-between items-center">
     <!-- Contact Info -->
-    <div class="flex items-center space-x-6 space-x-reverse text-[12px] font-medium tracking-wide">
-      <div class="flex items-center group cursor-pointer">
-        <div
-          class="w-7 h-7 rounded-full bg-cream-50 flex items-center justify-center ml-2 group-hover:bg-cream-200 transition-colors"
-        >
-          <i class="fas fa-mobile-alt text-emerald-700 text-[10px]" aria-hidden="true"></i>
+    <div class="flex items-center text-[12px] font-medium tracking-wide">
+      @if (phone(); as phone) {
+        <div class="flex items-center group">
+          <div
+            class="w-7 h-7 rounded-full bg-cream-50 flex items-center justify-center ml-2 group-hover:bg-cream-200 transition-colors"
+          >
+            <i class="fas fa-phone-alt text-emerald-700 text-[10px]" aria-hidden="true"></i>
+          </div>
+          <a
+            [href]="'tel:' + phone.dial"
+            dir="ltr"
+            class="group-hover:text-emerald-700 transition-colors whitespace-nowrap text-slate-700 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600"
+            >{{ phone.label }}</a
+          >
         </div>
-        <a
-          [href]="'tel:' + clinicPhone.landline.dial"
-          dir="ltr"
-          class="group-hover:text-emerald-700 transition-colors whitespace-nowrap text-slate-700"
-          >{{ clinicPhone.landline.label }}</a
-        >
-      </div>
+      }
     </div>
 
     <!-- Social Media -->
@@ -159,36 +152,38 @@
 
     <!-- Appointment Button & Mobile Toggle -->
     <div class="flex items-center shrink-0 space-x-2 sm:space-x-3 space-x-reverse">
-      <!-- Desktop appointment CTA -->
-      <a
-        [href]="'tel:' + clinicPhone.mobile.dial"
-        class="hidden lg:flex items-center gap-3 bg-emerald-800 text-cream-50 px-5 py-2.5 rounded-xl hover:bg-emerald-700 transition-all shadow-md group whitespace-nowrap border border-amber-500/30"
-        [attr.aria-label]="'دریافت نوبت تلفنی: ' + clinicPhone.mobile.label"
-      >
-        <div
-          class="w-8 h-8 rounded-lg bg-emerald-900 flex items-center justify-center group-hover:bg-emerald-800 transition-colors"
+      @if (phone(); as phone) {
+        <!-- Desktop appointment CTA -->
+        <a
+          [href]="'tel:' + phone.dial"
+          class="hidden lg:flex items-center gap-3 bg-emerald-800 text-cream-50 px-5 py-2.5 rounded-xl hover:bg-emerald-700 transition-all shadow-md group whitespace-nowrap border border-amber-500/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+          [attr.aria-label]="'دریافت نوبت تلفنی: ' + phone.label"
         >
-          <i class="fas fa-calendar-alt text-amber-300 text-sm" aria-hidden="true"></i>
-        </div>
-        <div class="flex flex-col items-start">
-          <span class="text-[9px] font-semibold text-amber-300 mb-0.5">دریافت نوبت</span>
-          <span dir="ltr" class="text-[12px] font-semibold leading-tight whitespace-nowrap">
-            {{ clinicPhone.mobile.label }}
-          </span>
-        </div>
-      </a>
+          <div
+            class="w-8 h-8 rounded-lg bg-emerald-900 flex items-center justify-center group-hover:bg-emerald-800 transition-colors"
+          >
+            <i class="fas fa-calendar-alt text-amber-300 text-sm" aria-hidden="true"></i>
+          </div>
+          <div class="flex flex-col items-start">
+            <span class="text-[9px] font-semibold text-amber-300 mb-0.5">دریافت نوبت</span>
+            <span dir="ltr" class="text-[12px] font-semibold leading-tight whitespace-nowrap">
+              {{ phone.label }}
+            </span>
+          </div>
+        </a>
 
-      <!-- Mobile call CTA: the appointment card above is desktop only -->
-      <a
-        [href]="'tel:' + clinicPhone.mobile.dial"
-        class="lg:hidden flex items-center justify-center gap-2 min-h-11 min-w-11 bg-emerald-800 text-cream-50 px-3.5 py-2.5 rounded-xl hover:bg-emerald-700 transition-all shadow-md border border-amber-500/30"
-        [attr.aria-label]="'تماس تلفنی با مطب: ' + clinicPhone.mobile.label"
-      >
-        <i class="fas fa-phone-alt text-amber-300 text-sm" aria-hidden="true"></i>
-        <span dir="ltr" class="hidden sm:inline text-[12px] font-semibold whitespace-nowrap">
-          {{ clinicPhone.mobile.label }}
-        </span>
-      </a>
+        <!-- Mobile call CTA: the appointment card above is desktop only -->
+        <a
+          [href]="'tel:' + phone.dial"
+          class="lg:hidden flex items-center justify-center gap-2 min-h-11 min-w-11 bg-emerald-800 text-cream-50 px-3.5 py-2.5 rounded-xl hover:bg-emerald-700 transition-all shadow-md border border-amber-500/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+          [attr.aria-label]="'تماس تلفنی با مطب: ' + phone.label"
+        >
+          <i class="fas fa-phone-alt text-amber-300 text-sm" aria-hidden="true"></i>
+          <span dir="ltr" class="hidden sm:inline text-[12px] font-semibold whitespace-nowrap">
+            {{ phone.label }}
+          </span>
+        </a>
+      }
 
       <!-- Mobile Menu Button -->
       <button

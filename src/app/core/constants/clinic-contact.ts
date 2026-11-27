@@ -1,36 +1,23 @@
 import type { PhoneDto } from '../models/footer.model';
 
 export interface ClinicPhone {
-  /** Formatted the way visitors read it, e.g. `0918 305 0600`. */
+  /** The number exactly as the footer API returned it, e.g. `0912 345 6789`. */
   label: string;
   /** Digits only, safe to put in a `tel:` link. */
   dial: string;
 }
 
-export interface ClinicPhones {
-  landline: ClinicPhone;
-  mobile: ClinicPhone;
+export interface ClinicContact {
+  /** The single clinic number advertised by the header and the footer. */
+  phone: ClinicPhone | null;
+  /** Text stored in a phone field that is not a number (e.g. a postal address). */
+  addressExtras: string[];
 }
-
-/**
- * The clinic contact numbers. Both the public header (booking CTA, top bar and
- * mobile drawer) and the footer resolve to these values, so a visitor never
- * reads one number and dials another.
- */
-export const CLINIC_PHONES: ClinicPhones = {
-  landline: { label: '081-32532356', dial: '08132532356' },
-  mobile: { label: '0918 305 0600', dial: '09183050600' },
-};
 
 /** Shorter values are captions, not dialable numbers. */
 const MIN_PHONE_DIGITS = 7;
 
-interface PhoneCandidate {
-  label: string;
-  digits: string;
-}
-
-function asPhone(value?: string | null): PhoneCandidate | null {
+function asPhone(value?: string | null): ClinicPhone | null {
   const label = (value ?? '').trim();
 
   if (!label) {
@@ -44,58 +31,28 @@ function asPhone(value?: string | null): PhoneCandidate | null {
     digits = `0${digits.slice(2)}`;
   }
 
-  return digits.length >= MIN_PHONE_DIGITS ? { label, digits } : null;
-}
-
-function isMobile(digits: string): boolean {
-  return digits.startsWith('09');
-}
-
-function toClinicPhone(candidate: PhoneCandidate): ClinicPhone {
-  return { label: candidate.label, dial: candidate.digits };
-}
-
-export interface ResolvedClinicPhones extends ClinicPhones {
-  /** Text that was stored in a phone field but is not a number (e.g. an address). */
-  addressExtras: string[];
+  return digits.length >= MIN_PHONE_DIGITS ? { label, dial: digits } : null;
 }
 
 /**
- * Maps the numbers the footer API returns onto the canonical clinic numbers.
+ * Resolves the one clinic number the header and the footer advertise from the
+ * footer API payload — the only authoritative source for it.
  *
- * The payload is classified by value rather than by field name because some
- * deployments return the landline in `mobile` (or the postal address in
- * `landline`). Anything that cannot be classified falls back to
- * {@link CLINIC_PHONES}, so the header and the footer always agree.
+ * The payload exposes two fields; the mobile line is the booking channel, so it
+ * wins when both are present, otherwise the landline is used. There is no
+ * hardcoded fallback: when the API has no usable number, both components hide
+ * the phone instead of advertising a number the database does not contain.
  */
-export function resolveClinicPhones(phone?: PhoneDto | null): ResolvedClinicPhones {
-  const landlineCandidate = asPhone(phone?.landline);
-  const mobileCandidate = asPhone(phone?.mobile);
+export function resolveClinicContact(phone?: PhoneDto | null): ClinicContact {
+  const mobile = asPhone(phone?.mobile);
+  const landline = asPhone(phone?.landline);
 
   const addressExtras: string[] = [];
   const rawLandline = (phone?.landline ?? '').trim();
 
-  if (rawLandline && !landlineCandidate) {
+  if (rawLandline && !landline) {
     addressExtras.push(rawLandline);
   }
 
-  const landline =
-    (landlineCandidate && !isMobile(landlineCandidate.digits)
-      ? toClinicPhone(landlineCandidate)
-      : null) ??
-    (mobileCandidate && !isMobile(mobileCandidate.digits)
-      ? toClinicPhone(mobileCandidate)
-      : null) ??
-    CLINIC_PHONES.landline;
-
-  const mobile =
-    (mobileCandidate && isMobile(mobileCandidate.digits)
-      ? toClinicPhone(mobileCandidate)
-      : null) ??
-    (landlineCandidate && isMobile(landlineCandidate.digits)
-      ? toClinicPhone(landlineCandidate)
-      : null) ??
-    CLINIC_PHONES.mobile;
-
-  return { landline, mobile, addressExtras };
+  return { phone: mobile ?? landline, addressExtras };
 }

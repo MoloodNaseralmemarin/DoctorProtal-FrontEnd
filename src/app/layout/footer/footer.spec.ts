@@ -57,7 +57,7 @@ describe('FooterComponent', () => {
     httpMock.expectOne((request) => request.url.endsWith('/footer')).flush(payload);
   });
 
-  it('renders services, address, tel links and copyright from the API payload', () => {
+  it('renders services, address, the single API phone and copyright', () => {
     const fixture = create();
 
     httpMock.expectOne((request) => request.url.endsWith('/footer')).flush(payload);
@@ -73,15 +73,29 @@ describe('FooterComponent', () => {
 
     expect(text).toContain(payload.address.title);
     expect(text).toContain(payload.address.lines[0]);
-    expect(text).toContain(payload.address.phone.landline);
     expect(text).toContain(payload.address.phone.mobile);
+    expect(text).not.toContain(payload.address.phone.landline);
 
-    expect(footer.querySelector(`a[href="tel:${payload.address.phone.landline}"]`)).toBeTruthy();
-    expect(footer.querySelector(`a[href="tel:${payload.address.phone.mobile}"]`)).toBeTruthy();
+    const telLinks = Array.from(footer.querySelectorAll<HTMLAnchorElement>('a[href^="tel:"]'));
+    expect(telLinks.length).toBe(1);
+    expect(telLinks[0].getAttribute('href')).toBe(`tel:${payload.address.phone.mobile}`);
     expect(footer.querySelector('a[href="https://instagram.com/example"]')).toBeTruthy();
 
     expect(text).toContain(payload.copyright);
     expect(text).not.toContain(FALLBACK_COPYRIGHT);
+  });
+
+  it('falls back to the landline only when the payload has no mobile number', () => {
+    const fixture = create();
+
+    httpMock.expectOne((request) => request.url.endsWith('/footer')).flush({
+      ...payload,
+      address: { ...payload.address, phone: { landline: '02188776655', mobile: '' } },
+    });
+    fixture.detectChanges();
+
+    const text = footerElement(fixture).textContent ?? '';
+    expect(text).toContain('02188776655');
   });
 
   it('still renders the footer with the fallback copyright when the API fails', () => {

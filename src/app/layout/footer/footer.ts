@@ -4,11 +4,7 @@ import { RouterModule } from '@angular/router';
 
 import { FooterDto } from '../../core/models/footer.model';
 import { FooterService } from '../../core/services/footer.service';
-import {
-  CLINIC_PHONES,
-  ClinicPhones,
-  resolveClinicPhones,
-} from '../../core/constants/clinic-contact';
+import { ClinicPhone, resolveClinicContact } from '../../core/constants/clinic-contact';
 
 @Component({
   selector: 'app-footer',
@@ -26,8 +22,8 @@ export class FooterComponent implements OnInit {
    */
   protected readonly footer = signal<FooterDto | null>(null);
 
-  /** Numbers shown in the contact card; the shared clinic numbers by default. */
-  protected readonly clinicPhones = signal<ClinicPhones>(CLINIC_PHONES);
+  /** The one clinic number, resolved from the footer payload the header also uses. */
+  protected readonly phone = signal<ClinicPhone | null>(null);
 
   /** `address.lines` plus any address text the API parked in a phone field. */
   protected readonly addressLines = signal<readonly string[]>([]);
@@ -40,11 +36,11 @@ export class FooterComponent implements OnInit {
     this.footerService.getFooter().subscribe({
       next: (data) => {
         const lines = data?.address?.lines ?? [];
-        const phones = resolveClinicPhones(data?.address?.phone);
+        const contact = resolveClinicContact(data?.address?.phone);
 
         this.footer.set(data);
-        this.clinicPhones.set({ landline: phones.landline, mobile: phones.mobile });
-        this.addressLines.set(lines.length ? lines : phones.addressExtras);
+        this.phone.set(contact.phone);
+        this.addressLines.set(lines.length ? lines : contact.addressExtras);
       },
       error: () => this.footer.set(null),
     });

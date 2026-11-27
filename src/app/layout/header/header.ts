@@ -13,7 +13,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { FooterService } from '../../core/services/footer.service';
 import { SocialDto } from '../../core/models/footer.model';
-import { CLINIC_PHONES } from '../../core/constants/clinic-contact';
+import { ClinicPhone, resolveClinicContact } from '../../core/constants/clinic-contact';
 import { PUBLIC_NAV_LINKS } from '../../core/constants/navigation';
 import { lockBodyScroll, unlockBodyScroll } from '../../core/ui/body-scroll-lock';
 
@@ -31,23 +31,29 @@ export class HeaderComponent implements OnInit, OnDestroy {
   protected readonly navLinks = PUBLIC_NAV_LINKS;
 
   /**
-   * The clinic numbers come from the shared `CLINIC_PHONES` constant so the
-   * header and the footer never advertise different numbers.
+   * The single clinic number, read from the footer payload so the header and
+   * the footer can never advertise different numbers.
    */
-  protected readonly clinicPhone = CLINIC_PHONES;
+  protected readonly phone = signal<ClinicPhone | null>(null);
 
   protected readonly isMenuOpen = signal(false);
   protected readonly socialLinks = signal<readonly SocialDto[]>([]);
 
   ngOnInit(): void {
-    // Social links are part of the footer payload; the header renders the same
-    // list in its top bar and mobile drawer.
+    // Social links and the phone number are part of the footer payload. The
+    // service shares the response, so this is the same request the footer uses.
     this.footerService
       .getFooter()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (data) => this.socialLinks.set(data?.social ?? []),
-        error: () => this.socialLinks.set([]),
+        next: (data) => {
+          this.socialLinks.set(data?.social ?? []);
+          this.phone.set(resolveClinicContact(data?.address?.phone).phone);
+        },
+        error: () => {
+          this.socialLinks.set([]);
+          this.phone.set(null);
+        },
       });
   }
 
