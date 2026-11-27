@@ -1,0 +1,212 @@
+<footer
+  id="footer"
+  class="relative overflow-hidden bg-emerald-950 text-cream-50 border-t border-cream-200/20 pt-14 pb-8 sm:pt-16 md:pt-20 md:pb-10"
+  dir="rtl"
+>
+  <!-- Decorative accents -->
+  <div
+    class="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-l from-emerald-800 via-emerald-700 to-amber-500"
+    aria-hidden="true"
+  ></div>
+  <div
+    class="pointer-events-none absolute -bottom-32 -left-24 w-80 h-80 sm:w-96 sm:h-96 rounded-full bg-emerald-800/20 blur-[110px]"
+    aria-hidden="true"
+  ></div>
+
+  <div class="container mx-auto px-4 sm:px-6 relative z-10">
+    <div
+      class="grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-8 lg:grid-cols-12 lg:gap-8 xl:gap-10 mb-12 md:mb-14"
+    >
+      <!-- Brand -->
+      <div class="sm:col-span-2 lg:col-span-4 min-w-0">
+        <a
+          routerLink="/"
+          fragment="home"
+          class="inline-flex items-center gap-3.5 sm:gap-4 mb-5 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-4 focus-visible:ring-offset-emerald-950"
+        >
+          <span
+            class="w-12 h-12 shrink-0 rounded-xl bg-emerald-900 flex items-center justify-center text-amber-300 shadow-lg border border-emerald-800"
+          >
+            <i class="fas fa-eye text-xl" aria-hidden="true"></i>
+          </span>
+          <span class="flex flex-col min-w-0">
+            <span class="text-base sm:text-lg font-bold text-white leading-tight">
+              دکتر رکسانا حق پرست
+            </span>
+            <span
+              class="text-[9px] sm:text-[10px] font-semibold text-amber-400 tracking-[0.18em] mt-1 uppercase"
+            >
+              Ophthalmology Clinic
+            </span>
+          </span>
+        </a>
+
+        <p class="text-emerald-100/80 text-[13px] sm:text-sm leading-7 font-medium max-w-sm">
+          مرکز تخصصی بیماری‌های چشم و جراحی‌های پیشرفته قرنیه با مجهزترین دستگاه‌های روز دنیا در
+          خدمت سلامت بینایی شما.
+        </p>
+
+        <nav
+          *ngIf="socialLinks().length"
+          class="flex items-center gap-3 mt-6"
+          aria-label="شبکه‌های اجتماعی"
+        >
+          <a
+            *ngFor="let item of socialLinks()"
+            [href]="item.link"
+            [attr.aria-label]="'صفحه ' + item.icon"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="footer-social w-11 h-11 rounded-xl bg-emerald-900 flex items-center justify-center text-emerald-200 border border-emerald-800/60 hover:bg-emerald-800 hover:text-white hover:border-amber-400/40 transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-emerald-950"
+          >
+            <i
+              [ngClass]="['fa-brands', 'fa-' + item.icon, 'text-lg']"
+              aria-hidden="true"
+            ></i>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Services -->
+      <nav
+        *ngIf="services().length"
+        class="sm:col-span-2 lg:col-span-3 min-w-0"
+        aria-labelledby="footer-services-title"
+      >
+        <div class="flex items-center gap-3 mb-5">
+          <span class="w-1 h-5 bg-amber-500 rounded-full" aria-hidden="true"></span>
+          <h2 id="footer-services-title" class="text-base md:text-lg font-bold text-white">
+            خدمات تخصصی
+          </h2>
+        </div>
+
+        <ul class="grid gap-x-6 gap-y-3 sm:grid-cols-2 lg:grid-cols-1">
+          <li *ngFor="let service of services()">
+            <a
+              routerLink="/"
+              fragment="services"
+              class="group flex items-center gap-2 py-1 text-[13px] sm:text-sm font-medium leading-6 text-emerald-100/80 hover:text-amber-300 transition-colors rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-emerald-950"
+            >
+              <i
+                class="fas fa-chevron-left w-2 text-[8px] text-amber-500/50 group-hover:text-amber-400 group-hover:-translate-x-0.5 transition-all duration-200"
+                aria-hidden="true"
+              ></i>
+              <span>{{ service }}</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Address & Contact Card -->
+      <section
+        *ngIf="address() as address"
+        class="sm:col-span-2 lg:col-span-5 min-w-0"
+        aria-labelledby="footer-address-title"
+      >
+        <div
+          class="relative h-full overflow-hidden rounded-2xl bg-emerald-900/60 border border-emerald-800/80 p-5 sm:p-6 xl:p-7 ring-1 ring-inset ring-white/5"
+        >
+          <div
+            class="pointer-events-none absolute -top-16 -left-10 w-40 h-40 rounded-full bg-amber-500/5 blur-2xl"
+            aria-hidden="true"
+          ></div>
+
+          <div class="relative flex items-center gap-3 mb-5">
+            <span
+              class="w-10 h-10 shrink-0 rounded-xl bg-emerald-950/70 border border-emerald-800 flex items-center justify-center text-amber-300"
+            >
+              <i class="fas fa-location-dot text-base" aria-hidden="true"></i>
+            </span>
+            <h2
+              id="footer-address-title"
+              class="text-base md:text-lg font-bold text-white leading-tight"
+            >
+              {{ address.title }}
+            </h2>
+          </div>
+
+          <div class="relative mb-6">
+            <p
+              *ngFor="let line of addressLines()"
+              class="text-[13px] sm:text-sm leading-7 text-emerald-100/85 font-medium break-words"
+            >
+              {{ line }}
+            </p>
+          </div>
+
+          <div class="relative pt-5 border-t border-emerald-800/70">
+            <p
+              class="flex items-center gap-2 mb-3 text-[11px] font-bold text-amber-300/90"
+            >
+              <i class="fas fa-phone-volume text-xs" aria-hidden="true"></i>
+              تماس با مطب
+            </p>
+
+            <div class="grid grid-cols-1 gap-2.5">
+              <a
+                [href]="'tel:' + clinicPhones().landline.dial"
+                class="group flex items-center gap-3 rounded-xl bg-emerald-950/60 border border-emerald-800/70 px-3.5 py-3 hover:bg-emerald-950 hover:border-amber-400/40 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-emerald-950"
+              >
+                <span
+                  class="w-9 h-9 shrink-0 rounded-lg bg-amber-500/10 text-amber-300 flex items-center justify-center group-hover:bg-amber-500/20 transition-colors"
+                >
+                  <i class="fas fa-phone-alt text-sm" aria-hidden="true"></i>
+                </span>
+                <span class="min-w-0 flex flex-col items-start">
+                  <span class="text-[11px] font-medium text-emerald-300/90">تلفن ثابت</span>
+                  <span
+                    dir="ltr"
+                    class="text-sm sm:text-base font-bold text-cream-50 tabular-nums tracking-wide group-hover:text-amber-300 transition-colors"
+                  >
+                    {{ clinicPhones().landline.label }}
+                  </span>
+                </span>
+              </a>
+
+              <a
+                [href]="'tel:' + clinicPhones().mobile.dial"
+                class="group flex items-center gap-3 rounded-xl bg-emerald-950/60 border border-emerald-800/70 px-3.5 py-3 hover:bg-emerald-950 hover:border-amber-400/40 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-emerald-950"
+              >
+                <span
+                  class="w-9 h-9 shrink-0 rounded-lg bg-amber-500/10 text-amber-300 flex items-center justify-center group-hover:bg-amber-500/20 transition-colors"
+                >
+                  <i class="fas fa-mobile-alt text-sm" aria-hidden="true"></i>
+                </span>
+                <span class="min-w-0 flex flex-col items-start">
+                  <span class="text-[11px] font-medium text-emerald-300/90">تلفن همراه</span>
+                  <span
+                    dir="ltr"
+                    class="text-sm sm:text-base font-bold text-cream-50 tabular-nums tracking-wide group-hover:text-amber-300 transition-colors"
+                  >
+                    {{ clinicPhones().mobile.label }}
+                  </span>
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Bottom bar -->
+    <div
+      class="pt-7 border-t border-emerald-900/90 flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-6 text-center sm:text-start"
+    >
+      <p class="text-emerald-100/60 text-[12px] sm:text-xs font-medium leading-6">
+        {{ footer()?.copyright || 'کلیه حقوق این وب‌سایت محفوظ است.' }}
+      </p>
+
+      <p class="text-[11px] sm:text-xs font-semibold text-emerald-100/60 flex items-center gap-2">
+        طراحی و سئو توسط
+        <a
+          href="https://yourwebsite.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="px-3 py-1.5 rounded-lg bg-emerald-900 text-emerald-300 border border-emerald-800 hover:bg-emerald-800 hover:text-white hover:border-amber-400/30 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-emerald-950"
+        >
+          ملودی
+        </a>
+      </p>
+    </div>
+  </div>
+</footer>

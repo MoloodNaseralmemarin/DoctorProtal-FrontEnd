@@ -1,12 +1,21 @@
-import { Component, ElementRef, HostListener, inject, signal, viewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  HostListener,
+  inject,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { RouterOutlet, RouterModule, Router } from '@angular/router';
+
 import { Sidebar } from '../sidebar/sidebar';
-import { ToastComponent } from '../../shared/toast-component/toast-component';
-import { AuthService } from '../../core/auth';
+import { ToastComponent } from '../../shared/ui/toast/toast';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
-  selector: 'app-dashboard-layoutcomponent',
-  standalone: true,
+  selector: 'app-dashboard-layout',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [Sidebar, RouterOutlet, RouterModule, ToastComponent],
   templateUrl: './dashboard-layout.html',
   styleUrl: './dashboard-layout.css',
@@ -20,12 +29,12 @@ export class DashboardLayout {
 
   private readonly menuButton = viewChild<ElementRef<HTMLButtonElement>>('menuButton');
 
-  openSidebar(): void {
+  protected openSidebar(): void {
     this.isSidebarOpen.set(true);
   }
 
   /** Closes the drawer and hands focus back to the control that opened it. */
-  closeSidebar(): void {
+  protected closeSidebar(): void {
     if (!this.isSidebarOpen()) {
       return;
     }
@@ -35,12 +44,12 @@ export class DashboardLayout {
   }
 
   @HostListener('document:keydown.escape')
-  onEscape(): void {
+  protected onEscape(): void {
     this.closeSidebar();
   }
 
-  onLogout(): void {
+  protected onLogout(): void {
     this.authService.logout();
-    this.router.navigate(['/login']);
+    void this.router.navigate(['/login']);
   }
 }

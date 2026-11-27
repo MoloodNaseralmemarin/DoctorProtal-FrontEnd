@@ -1,0 +1,95 @@
+<div class="bg-cream-100 py-20 border-b border-cream-200" dir="rtl" id="articles">
+  <div class="container mx-auto px-6">
+    <div class="text-center mb-12">
+      <span class="text-slate-600 font-semibold text-xs uppercase tracking-[0.2em] mb-3 block">
+        News &amp; Articles
+      </span>
+      <h2 class="text-xl md:text-2xl font-bold text-slate-900 mb-3">آخرین اخبار و مقالات</h2>
+      <div class="w-12 h-0.5 bg-amber-500 mx-auto rounded-full"></div>
+    </div>
+
+    @switch (status()) {
+      @case ('error') {
+        <div
+          class="max-w-xl mx-auto text-center py-16 px-6 bg-cream-50 rounded-2xl border border-cream-200"
+          role="alert"
+        >
+          <i class="fas fa-exclamation-circle text-amber-500 text-3xl block mb-4" aria-hidden="true"></i>
+          <p class="text-emerald-900 text-sm font-bold mb-5">دریافت فهرست مقالات با خطا مواجه شد.</p>
+          <button
+            type="button"
+            (click)="load()"
+            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-800 text-cream-50 text-xs font-bold hover:bg-emerald-700 transition-colors"
+          >
+            <i class="fas fa-redo" aria-hidden="true"></i>
+            تلاش دوباره
+          </button>
+        </div>
+      }
+      @case ('empty') {
+        <div class="text-center py-20 text-emerald-800">
+          <i class="fas fa-inbox text-4xl mb-4 block text-emerald-600/40" aria-hidden="true"></i>
+          <p class="text-sm font-semibold">هنوز مقاله‌ای منتشر نشده است</p>
+        </div>
+      }
+      @case ('ready') {
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          @for (item of blogs(); track item.id) {
+            <article
+              class="group bg-cream-50 rounded-2xl overflow-hidden shadow-xs border border-cream-200 hover:border-emerald-600 hover:shadow-md hover:shadow-emerald-900/5 transition-all duration-500"
+            >
+              <div class="h-1 bg-cream-200 group-hover:bg-emerald-800 transition-colors duration-500"></div>
+
+              <div class="p-6">
+                <div class="flex items-center gap-3 mb-4">
+                  <span
+                    class="w-8 h-8 rounded-lg bg-cream-100 border border-cream-200 flex items-center justify-center text-slate-700 group-hover:bg-emerald-800 group-hover:text-white transition-all duration-500 text-xs"
+                  >
+                    <i class="fas fa-newspaper" aria-hidden="true"></i>
+                  </span>
+                  <span class="text-[10px] font-bold text-amber-600 uppercase tracking-widest">
+                    مجله سلامت
+                  </span>
+                </div>
+
+                <h3
+                  class="text-sm font-semibold text-slate-800 mb-3 group-hover:text-emerald-800 transition-colors duration-300"
+                >
+                  {{ item.title }}
+                </h3>
+
+                <p class="text-slate-600 text-xs leading-relaxed line-clamp-3 font-medium mb-6">
+                  {{ item.description }}
+                </p>
+
+                <a
+                  [routerLink]="['/blog', item.id]"
+                  class="w-full py-2.5 bg-cream-100 text-slate-700 font-bold text-xs rounded-xl border border-cream-200 group-hover:bg-emerald-800 group-hover:text-white transition-all duration-300 flex items-center justify-center gap-2"
+                >
+                  <span>ادامه مطلب</span>
+                  <i
+                    class="fas fa-arrow-left text-[10px] text-amber-500 group-hover:text-amber-300"
+                    aria-hidden="true"
+                  ></i>
+                </a>
+              </div>
+            </article>
+          }
+        </div>
+      }
+      @default {
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" aria-hidden="true">
+          @for (item of [1, 2, 3]; track item) {
+            <div class="bg-cream-50 rounded-2xl border border-cream-200 p-6 animate-pulse">
+              <div class="h-4 w-24 bg-cream-200 rounded-full mb-6"></div>
+              <div class="h-4 w-3/4 bg-cream-200 rounded-full mb-3"></div>
+              <div class="h-3 w-full bg-cream-100 rounded-full mb-2"></div>
+              <div class="h-3 w-5/6 bg-cream-100 rounded-full mb-6"></div>
+              <div class="h-9 w-full bg-cream-100 rounded-xl"></div>
+            </div>
+          }
+        </div>
+      }
+    }
+  </div>
+</div>

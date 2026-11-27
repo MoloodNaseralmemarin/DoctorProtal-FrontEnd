@@ -1,74 +1,93 @@
-import { Routes } from "@angular/router";
-import { HomeComponent } from "./pages/home-component/home-component";
-import { MainLayout } from "./layout/main-layout/main-layout";
-import { EyeCareTipDetailComponent } from "./pages/details/eye-care-tip-detail-component/eye-care-tip-detail-component";
-import { BlogDetailComponent } from "./pages/details/blog-detail-component/blog-detail-component";
-import { authGuard } from "./core/auth-guard";
+import { Routes } from '@angular/router';
+import { authGuard } from './core/auth/auth.guard';
 
-
+/**
+ * Every route below the layouts is lazy loaded, so the public page does not
+ * download the admin screens and vice versa. Each route carries a title that
+ * the document title strategy applies on navigation.
+ */
 export const routes: Routes = [
   {
     path: '',
-    component: MainLayout,
+    loadComponent: () =>
+      import('./layout/public-layout/public-layout').then((m) => m.PublicLayout),
     children: [
-      { path: '', component: HomeComponent },
-
-      { path: 'eye-care-tip/:id', component: EyeCareTipDetailComponent },
-
-      { path: 'blog/:id', component: BlogDetailComponent },
+      {
+        path: '',
+        title: 'دکتر رکسانا حق پرست | جراح چشم و فوق تخصص شبکیه',
+        loadComponent: () => import('./features/home/home').then((m) => m.HomeComponent),
+      },
+      {
+        path: 'eye-care-tip/:id',
+        title: 'نکات مراقبت از چشم',
+        loadComponent: () =>
+          import('./features/eye-care-tip/eye-care-tip-detail/eye-care-tip-detail').then(
+            (m) => m.EyeCareTipDetailComponent,
+          ),
+      },
+      {
+        path: 'blog/:id',
+        title: 'مقالات چشم‌پزشکی',
+        loadComponent: () =>
+          import('./features/blog/blog-detail/blog-detail').then((m) => m.BlogDetailComponent),
+      },
     ],
   },
   {
     path: 'login',
-    loadComponent: () =>
-      import('./pages/login-component/login-component').then(m => m.LoginComponent),
+    title: 'ورود به پنل مدیریت',
+    loadComponent: () => import('./features/login/login').then((m) => m.LoginComponent),
   },
   {
     path: 'admin-panel',
+    title: 'پیشخوان مدیریت',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('./layout/dashboard-layout/dashboard-layout').then(m => m.DashboardLayout),
+      import('./layout/dashboard-layout/dashboard-layout').then((m) => m.DashboardLayout),
     children: [
       {
         path: '',
-        loadComponent: () =>
-          import('./pages/admin-panel-component/admin-panel-component').then(m => m.AdminPanelComponent),
+        title: 'پیشخوان مدیریت',
+        loadComponent: () => import('./features/admin/dashboard/dashboard').then((m) => m.AdminDashboardComponent),
       },
       {
-        path: 'banner-upload',
+        path: 'blog',
+        title: 'مدیریت وبلاگ',
         loadComponent: () =>
-          import('./pages/admin/admin-banner-upload-component/admin-banner-upload-component').then(m => m.AdminBannerUploadComponent),
+          import('./features/admin/blog-admin/blog-admin').then((m) => m.AdminBlogComponent),
       },
       {
-        path: 'admin-doctor-profile',
+        path: 'banner',
+        title: 'مدیریت بنر',
         loadComponent: () =>
-          import('./pages/admin/admin-doctor-profile-component/admin-doctor-profile-component').then(m => m.AdminDoctorProfileComponent),
+          import('./features/admin/banner-upload/banner-upload').then(
+            (m) => m.AdminBannerUploadComponent,
+          ),
       },
       {
-        path: 'admin-eye-careTip',
+        path: 'eye-care-tips',
+        title: 'نکات مراقبت از چشم',
         loadComponent: () =>
-          import('./pages/admin/admin-eye-care-tip-component/admin-eye-care-tip-component').then(m => m.AdminEyeCareTipComponent),
+          import('./features/admin/eye-care-tip-admin/eye-care-tip-admin').then(
+            (m) => m.AdminEyeCareTipComponent,
+          ),
       },
       {
-        path: 'admin-blog',
+        path: 'doctor-profile',
+        title: 'پروفایل پزشک',
         loadComponent: () =>
-          import('./pages/admin/admin-blog-component/admin-blog-component').then(m => m.AdminBlogComponent),
+          import('./features/admin/doctor-profile-admin/doctor-profile-admin').then(
+            (m) => m.AdminDoctorProfileComponent,
+          ),
       },
-      // Backwards-compatible alias for the old duplicated path.
-      {
-        path: 'admin-panel',
-        redirectTo: '',
-        pathMatch: 'full'
-      },
-    ]
+      // Legacy paths kept so existing bookmarks and links keep working.
+      { path: 'admin-blog', redirectTo: 'blog', pathMatch: 'full' },
+      { path: 'banner-upload', redirectTo: 'banner', pathMatch: 'full' },
+      { path: 'admin-eye-careTip', redirectTo: 'eye-care-tips', pathMatch: 'full' },
+      { path: 'admin-doctor-profile', redirectTo: 'doctor-profile', pathMatch: 'full' },
+      { path: 'admin-panel', redirectTo: '', pathMatch: 'full' },
+    ],
   },
-  {
-    path: 'dashboard',
-    redirectTo: 'admin-panel',
-    pathMatch: 'full'
-  },
-  {
-    path: '**',
-    redirectTo: ''
-  }
+  { path: 'dashboard', redirectTo: 'admin-panel', pathMatch: 'full' },
+  { path: '**', redirectTo: '' },
 ];

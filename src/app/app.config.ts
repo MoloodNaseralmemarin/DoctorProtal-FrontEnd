@@ -1,14 +1,10 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import {
-  provideHttpClient,
-  withInterceptors
-} from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app.routes';
-import { JwtInterceptor } from './core/interceptors/jwt-interceptor';
-
+import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,13 +15,10 @@ export const appConfig: ApplicationConfig = {
       // perform the scroll itself (and restore the position on back/forward).
       withInMemoryScrolling({
         scrollPositionRestoration: 'enabled',
-        anchorScrolling: 'enabled'
-      })
+        anchorScrolling: 'enabled',
+      }),
     ),
     provideClientHydration(withEventReplay()),
-
-    provideHttpClient(
-      withInterceptors([JwtInterceptor])
-    )
-  ]
+    provideHttpClient(withFetch(), withInterceptors([JwtInterceptor])),
+  ],
 };
